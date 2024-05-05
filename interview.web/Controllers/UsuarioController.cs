@@ -1,14 +1,47 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using interview.web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace interview.web.Controllers
 {
-    public class UsuarioController : Controller
+    public class UsuarioController : BaseController
     {
-        // GET: UsuarioController
-        public ActionResult Index()
+        public IActionResult Index()
         {
-            return View();
+            try
+            {
+                //var client = httpClient.CreateClient();
+                //var response = await client.GetAsync("https://techchallenge.azurewebsites.net/" + "Usuario");
+
+                //if (response.IsSuccessStatusCode)
+                //{
+                //    var obj = await response.Content?.ReadAsStringAsync();
+                //    return View(JsonConvert.DeserializeObject<UsuarioViewModel>(obj));
+                //}
+                //else
+                //{
+                //    var obj = await response.Content?.ReadAsStringAsync();
+                //    ViewBag.Erro = JsonConvert.DeserializeObject<ErrorViewModel>(obj).Erro;
+                //    return View();
+                //}
+
+                var i = new List<UsuarioViewModel>();
+                i.Add(new UsuarioViewModel()
+                {
+                    Cpf = "99999911199",
+                    Login = "andre.lima@skillcheck.com",
+                    Nome = "Andre Muniz",
+                    Perfil = "Avaliador",
+                    Senha = ""
+                });
+
+                return View(i.AsEnumerable());
+            }
+            catch (Exception e)
+            {
+                ViewBag.Erro = e.Message;
+                return View();
+            }
         }
 
         // GET: UsuarioController/Details/5

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\AdminBSBMaterialDesign-master.zip" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Models\Avaliador\" />
     <Folder Include="Models\NewFolder\" />
     <Folder Include="NewFolder\" />
