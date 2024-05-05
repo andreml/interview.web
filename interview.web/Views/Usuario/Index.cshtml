@@ -1,26 +1,20 @@
 ﻿@{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "Candidatos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Candidatos cadastrados</h1>
+<h1>Usuários do portal</h1>
 
 <section id="PartialViewCadastroUsuario">
-    <div class="card">
-        <div class="body">
-            <a class="btn bg-success waves-effect m-b-15 text-white" role="button" data-toggle="collapse" href="#cadastroUsuario" aria-expanded="false" aria-controls="cadastroUsuario">
-                Cadastrar
-            </a>
-            <div class="collapse in" id="cadastroUsuario" aria-expanded="true" style="">
-                <div class="well">
-                    @* <partial name="~/Views/Usuario/_Create.cshtml" /> *@
-                </div>
-            </div>
+    <div class="body">
+        <a class="btn bg-success waves-effect m-b-15 text-white" role="button" data-toggle="collapse" href="#cadastroUsuario" aria-expanded="false" aria-controls="cadastroUsuario">
+            Cadastrar
+        </a>
+        <div class="collapse out" id="cadastroUsuario" aria-expanded="false" style="">
+            <partial name="~/Views/Usuario/_Create.cshtml" />
         </div>
     </div>
 </section>
-<br />
-<br />
 <section id="PartialViewListarUsuarios">
     <partial name="~/Views/Usuario/_List.cshtml" />
 </section>

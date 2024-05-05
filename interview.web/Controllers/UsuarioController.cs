@@ -35,6 +35,16 @@ namespace interview.web.Controllers
                     Senha = ""
                 });
 
+                i.Add(new UsuarioViewModel()
+                {
+                    Cpf = "13245678977",
+                    Login = "andre.muniz@skillcheck.com",
+                    Nome = "Andre Lima",
+                    Perfil = "Candidato",
+                    Senha = ""
+                });
+
+                
                 return View(i.AsEnumerable());
             }
             catch (Exception e)
