@@ -57,7 +57,7 @@ namespace interview.web.Controllers
         // GET: UsuarioController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            return PartialView("_Edit");
         }
 
         // GET: UsuarioController/Create

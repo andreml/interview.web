@@ -49,8 +49,12 @@
                                                 @Html.DisplayFor(modelItem => item.Login)
                                             </td>
                                             <td>
-                                                @Html.ActionLink("Alterar", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                                @Html.ActionLink("Alterar", "Details", new { /* id=item.PrimaryKey */ }) |
                                                 @Html.ActionLink("Excluir", "Delete", new { /* id=item.PrimaryKey */ })
+
+                                               @*  <i class="material-icons">mode_edit</i>
+                                                 
+                                                <i class="material-icons">delete</i> *@
                                             </td>
                                         </tr>
                                     }
