@@ -8,32 +8,77 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Skill Check Login</title>
-</head>
-<body>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Skill Check - Login</title>
 
-<h4>Acesso ao portal</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Login">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Usuario" class="control-label"></label>
-                <input asp-for="Usuario" class="form-control" />
-                <span asp-validation-for="Usuario" class="text-danger"></span>
+    <link rel="icon" href="~/material-design/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <link href="~/material-design/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="~/material-design/plugins/node-waves/waves.css" rel="stylesheet" />
+    <link href="~/material-design/plugins/animate-css/animate.css" rel="stylesheet" />
+    <link href="~/material-design/css/style.css" rel="stylesheet">
+
+    <link href="~/material-design/plugins/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/material-design/plugins/node-waves/waves.css" rel="stylesheet" />
+    <link href="~/material-design/plugins/animate-css/animate.css" rel="stylesheet" />
+    <link href="~/material-design/css/style.css" rel="stylesheet" />
+</head>
+<body class="login-page bg-white">
+    <div class="login-box bg-white">
+        <div class="logo">
+            <a href="javascript:void(0);" style="color:dodgerblue;">Skill <b>CHECK</b></a>
+            <small style="color:dodgerblue;">Portal de entrevistas corporativo</small>
+        </div>
+        <div class="card">
+            <div class="body">
+                <form asp-action="Login">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">person</i>
+                        </span>
+                    </div>
+                    <div class="form-line">
+                        <input asp-for="login" type="text" class="form-control" name="login" placeholder="Digite seu login" required autofocus />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">person</i>
+                        </span>
+                    </div>
+                    <div class="form-line">
+                        <input asp-for="senha" type="password" class="form-control" name="senha" placeholder="Digite sua senha" required autofocus />
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <button class="btn btn-outline-light" type="submit">Login</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Senha" class="control-label"></label>
-                <input asp-for="Senha" class="form-control" />
-                <span asp-validation-for="Senha" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Login" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+        <div class="alert">
+            @Html.Raw(ViewBag.Alert);
+        </div>
     </div>
-</div>
 </body>
 </html>
+<script src="~/material-design/plugins/jquery/jquery.min.js"></script>
+<script src="~/material-design/plugins/bootstrap/js/bootstrap.js"></script>
+<script src="~/material-design/plugins/node-waves/waves.js"></script>
+<script src="~/material-design/plugins/jquery-validation/jquery.validate.js"></script>
+<script src="~/material-design/js/admin.js"></script>
+<script src="~/material-design/js/pages/examples/sign-in.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".alert").fadeTo(4000, 300).slideDown(300, function () {
+            $(".alert").slideDown(300);;
+        })
+    });
+</script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

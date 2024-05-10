@@ -2,7 +2,14 @@
 {
     public class LoginViewModel
     {
-        public string Usuario { get; set; }
-        public string Senha { get; set; }
+        public string login { get; set; }
+        public string senha { get; set; }
+    }
+
+    public class LoginViewResponseModel
+    {
+        public string nome { get; set; }
+        public string perfil { get; set; }
+        public string token { get; set; }
     }
 }
