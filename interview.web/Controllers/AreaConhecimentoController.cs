@@ -25,7 +25,7 @@ namespace interview.web.Controllers
         {
             try
             {
-                var token = this.GetToken(cache);
+                var token = base.GetToken(cache);
                 string url = _config.Url + "AreaConhecimento";
                 var response = await _get.GetCustomAsync(url, token);
                 return View(response);
@@ -35,14 +35,6 @@ namespace interview.web.Controllers
                 ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
                 return RedirectToAction("Index", "Home");
             }
-        }
-
-        private string GetToken(IMemoryCache cache)
-        {
-            string? token = cache.Get("token")?.ToString();
-            if (token is null) 
-                throw new Exception("Sessão expirou");
-            return token;
         }
     }
 }
