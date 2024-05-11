@@ -1,56 +1,39 @@
-﻿using interview.web.Models;
+﻿using interview.web.App.Interfaces;
+using interview.web.Config;
+using interview.web.Models;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
+using static interview.web.Models.Enums.Enumerator;
 
 namespace interview.web.Controllers
 {
     public class UsuarioController : BaseController
     {
-        public IActionResult Index()
+        IGetServices<UsuarioViewResponseModel> _get;
+        IPostServices<string> _post;
+        AppConfig _config;
+        public UsuarioController(IGetServices<UsuarioViewResponseModel> get,
+                                 IPostServices<string> post,
+                                 IOptions<AppConfig> options)
+        {
+            _get = get;
+            _post = post;
+            _config = options.Value;
+        }
+        public async Task<IActionResult> Index([FromServices] IMemoryCache cache)
         {
             try
             {
-                //var client = httpClient.CreateClient();
-                //var response = await client.GetAsync("https://techchallenge.azurewebsites.net/" + "Usuario");
-
-                //if (response.IsSuccessStatusCode)
-                //{
-                //    var obj = await response.Content?.ReadAsStringAsync();
-                //    return View(JsonConvert.DeserializeObject<UsuarioViewModel>(obj));
-                //}
-                //else
-                //{
-                //    var obj = await response.Content?.ReadAsStringAsync();
-                //    ViewBag.Erro = JsonConvert.DeserializeObject<ErrorViewModel>(obj).Erro;
-                //    return View();
-                //}
-
-                var i = new List<UsuarioViewModel>();
-                i.Add(new UsuarioViewModel()
-                {
-                    Cpf = "99999911199",
-                    Login = "andre.lima@skillcheck.com",
-                    Nome = "Andre Muniz",
-                    Perfil = "Avaliador",
-                    Senha = ""
-                });
-
-                i.Add(new UsuarioViewModel()
-                {
-                    Cpf = "13245678977",
-                    Login = "andre.muniz@skillcheck.com",
-                    Nome = "Andre Lima",
-                    Perfil = "Candidato",
-                    Senha = ""
-                });
-
-                
-                return View(i.AsEnumerable());
+                var token = this.GetToken(cache);
+                string url = _config.Url + "Usuario";
+                var response = await _get.GetCustomAsync(url, token);
+                return View(response);
             }
             catch (Exception e)
             {
-                ViewBag.Erro = e.Message;
-                return View();
+                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
+                return RedirectToAction("Index", "Home");
             }
         }
 
@@ -69,14 +52,20 @@ namespace interview.web.Controllers
         // POST: UsuarioController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(IFormCollection collection, [FromServices] IMemoryCache cache)
         {
             try
             {
+                var token = this.GetToken(cache);
+                var url = _config.Url + "Usuario";
+                var body = new UsuarioViewModel() { cpf = collection["cpf"].ToString(), login = collection["cpf"].ToString(), nome = collection["cpf"].ToString(), perfil = collection["cpf"].ToString(), senha = collection["cpf"].ToString() };
+                var response = await _post.PostCustomAsync(body, url, token);
+                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, response);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception e)
             {
+                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
                 return View();
             }
         }
@@ -121,6 +110,13 @@ namespace interview.web.Controllers
             {
                 return View();
             }
+        }
+
+        private string GetToken(IMemoryCache cache)
+        {
+            string? token = cache.Get("token")?.ToString();
+            if (token is null) throw new Exception("Sessão expirou");
+            return token;
         }
     }
 }
