@@ -1,0 +1,46 @@
+﻿@model IEnumerable<interview.web.Models.AreaConhecimentoResponseViewModel>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<table class="table table-bordered table-striped table-hover js-basic-example dataTable" id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Descrição
+            </th>
+            <th>
+                Perguntas Cadastradas
+            </th>
+            <th>
+                Ações
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.descricao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.perguntasCadastradas)
+                </td>
+                <td>
+                    @Html.ActionLink("Alterar", "Details", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+        
+
+    </tbody>
+</table>
