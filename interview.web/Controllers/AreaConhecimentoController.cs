@@ -10,10 +10,10 @@ namespace interview.web.Controllers
 {
     public class AreaConhecimentoController : BaseController
     {
-        private readonly IGetServices<List<AreaConhecimentoResponseViewModel>> _get;
+        private readonly IGetServices<List<AreaConhecimentoViewModel>> _get;
         private readonly IPostServices<string> _post;
         private readonly AppConfig _config;
-        public AreaConhecimentoController(IGetServices<List<AreaConhecimentoResponseViewModel>> get,
+        public AreaConhecimentoController(IGetServices<List<AreaConhecimentoViewModel>> get,
                                  IPostServices<string> post,
                                  IOptions<AppConfig> options)
         {
@@ -35,6 +35,25 @@ namespace interview.web.Controllers
                 ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
                 return RedirectToAction("Index", "Home");
             }
+        }
+
+        public async Task<ActionResult> Details(Guid id, [FromServices] IMemoryCache cache)
+        {
+            try
+            {
+                var token = base.GetToken(cache);
+                string url = $"{_config.Url}AreaConhecimento";
+                var parameters = new Dictionary<string, object>();
+                parameters.Add("areaConhecimentoId", id);
+                var response = await _get.GetCustomQueryIdAsync(url, token, parameters);
+                return PartialView("_Edit", response.FirstOrDefault());
+            }
+            catch (Exception e)
+            {
+                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
+                return RedirectToAction("Index", "Home");
+            }
+            
         }
     }
 }
