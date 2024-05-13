@@ -1,29 +1,22 @@
-name: Build e deploy Portal Skill Check
-
-env:
-  AZURE_WEBAPP_NAME: your-app-name    # set this to the name of your Azure Web App
-  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '7'                 # set this to the .NET Core version to use
+name: Build e deploy para o Azure Web App
 
 on:
   push:
-    branches: [ "feature/inicioProjeto" ]
+    branches:
+      - main
   workflow_dispatch:
-
-permissions:
-  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v2
+      - name: Configurando a versão do .NET
+        uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: '7.x'
+          include-prerelease: true
 
       - name: Set up dependency caching for faster builds
         uses: actions/cache@v3
@@ -55,15 +48,16 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
-      - name: Download artifact from build job
+      - name: Download do artefato para o build job
         uses: actions/download-artifact@v3
         with:
           name: .net-app
 
-      - name: Deploy to Azure Web App
+      - name: Deploy para o Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          app-name: 'skillcheckrtech'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_807F19EC175144CFA128B491B6EEBBAD }}
+          package: .
