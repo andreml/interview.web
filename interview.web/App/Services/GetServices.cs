@@ -1,5 +1,6 @@
 ﻿using interview.web.App.Interfaces;
 using interview.web.Models;
+using Microsoft.CodeAnalysis.Operations;
 using Newtonsoft.Json;
 
 namespace interview.web.App.Services
@@ -43,6 +44,20 @@ namespace interview.web.App.Services
             {
                 throw new Exception(e.Message);
             }
+        }
+
+        public async Task<T> GetCustomQueryIdAsync(string urlPath, string token, Dictionary<string, object> queryStringParameters)
+        {
+            if (queryStringParameters.Count == 0)
+                throw new Exception("Não foram informados os parâmetros para o get!");
+
+            string parametros = "?";
+
+            foreach (var item in queryStringParameters)
+                parametros = $"{parametros}{item.Key}={item.Value}";
+
+            string url = urlPath + parametros;
+            return await GetCustomAsync(url, token);
         }
     }
 }
