@@ -10,6 +10,7 @@ builder.Services.AddHttpClient();
 builder.Services.Configure<AppConfig>(builder.Configuration.GetSection("AppConfig"));
 builder.Services.AddScoped(typeof(IGetServices<>), typeof(GetService<>));
 builder.Services.AddScoped(typeof(IPostServices<>), typeof(PostService<>));
+builder.Services.AddScoped(typeof(IPutServices<>), typeof(PutServices<>));
 builder.Services.AddMemoryCache();
 var app = builder.Build();
 
