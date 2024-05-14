@@ -4,7 +4,9 @@
 @{
 }
 <h1>Áreas de conhecimento</h1>
-
+<div>
+    @Html.ActionLink("Cadastrar", "Create", "AreaConhecimento", null, new { @class = "btn bg-teal waves-effect col-sm-1" })
+</div>
 <section id="PartialViewListarAreasConhecimento">
     <partial name="~/Views/AreaConhecimento/_List.cshtml" />
 </section>
