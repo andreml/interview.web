@@ -14,16 +14,19 @@ namespace interview.web.Controllers
         private readonly IGetServices<List<AreaConhecimentoViewModel>> _get;
         private readonly IPostServices<string> _post;
         private readonly IPutServices<string> _put;
+        private readonly IDeleteServices<string> _delete;
         private readonly AppConfig _config;
         public AreaConhecimentoController(IGetServices<List<AreaConhecimentoViewModel>> get,
                                  IPostServices<string> post,
                                  IOptions<AppConfig> options,
-                                 IPutServices<string> put)
+                                 IPutServices<string> put,
+                                 IDeleteServices<string> delete)
         {
             _get = get;
             _post = post;
             _config = options.Value;
             _put = put;
+            _delete = delete;
         }
         public async Task<IActionResult> Index([FromServices] IMemoryCache cache)
         {
@@ -57,8 +60,6 @@ namespace interview.web.Controllers
         }
 
         
-
-        // POST: UsuarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(AreaConhecimentoViewModel areaConhecimentoViewModel, [FromServices] IMemoryCache cache)
@@ -77,6 +78,23 @@ namespace interview.web.Controllers
                 ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
                 return RedirectToAction("Index", "Home");
             }
+        }
+
+        public async Task<ActionResult> Delete(string id, [FromServices] IMemoryCache cache)
+        {
+            try
+            {
+                var token = base.GetToken(cache);
+                string url = $"{_config.Url}AreaConhecimento";
+                var response = await _delete.DeleteByIdCustomAsync(url, token, id);
+                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, response);
+            }
+            catch (Exception e)
+            {
+                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
+                
+            }
+            return RedirectToAction("Index", "AreaConhecinmento");
         }
 
         private async Task<AreaConhecimentoViewModel> GetAreaConhecimento(Guid id, IMemoryCache cache)

@@ -35,7 +35,7 @@
                                 @Html.ActionLink("Alterar", "Details", new { id = item.id }, new { @class = "btn bg-teal waves-effect col-sm-2 col-lg-10" })
                             </td>
                             <td>
-                                @Html.ActionLink("Excluir", "Delete", new { id = item.id }, new { @class = "btn bg-warning waves-effect col-sm-2 col-lg-10" })
+                                @Html.ActionLink("Excluir", "Delete", new { id = item.id.ToString() }, new { @class = "btn bg-warning waves-effect col-sm-2 col-lg-10" })
                             </td>
                         </tr>
                     }
