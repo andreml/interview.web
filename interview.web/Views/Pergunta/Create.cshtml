@@ -1,0 +1,89 @@
+﻿@model PerguntaViewModel
+
+@{
+    ViewData["Title"] = "Cadastro de perguntas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="card">
+        <div class="header">
+            <h2>
+                Cadastrar nova pergunta
+            </h2>
+        </div>
+        <div class="body">
+            <form asp-action="Create">
+                <div class="row clearfix">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label asp-for="descricao" class="control-label">Pergunta</label>
+                                <input asp-for="descricao" type="text" class="form-control" placeholder="Digite a pergunta">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="form-line">
+                                <label asp-for="areaConhecimento" class="control-label">Area de Conhecimento</label>
+                                <input asp-for="areaConhecimento" type="text" class="form-control" placeholder="Digite a area de conhecimento">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="form-line">
+                            <label asp-for="resposta1" class="control-label">Respostas 1</label>
+                            <input asp-for="resposta1" type="text" class="form-control" placeholder="Digite uma respostas">
+                            @* <label class="control-label">Correta</label>
+                            @Html.CheckBoxFor(model => model.selecionado1) *@
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-line">
+                            <label asp-for="resposta2" class="control-label">Respostas 2</label>
+                            <input asp-for="resposta2" type="text" class="form-control" placeholder="Digite uma respostas">
+                            @* <label class="control-label">Correta</label>
+                            @Html.CheckBoxFor(model => model.selecionado2) *@
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-line">
+                            <label asp-for="resposta3" class="control-label">Respostas 3</label>
+                            <input asp-for="resposta3" type="text" class="form-control" placeholder="Digite uma respostas">
+                            @* <label class="control-label">Correta</label>
+                            @Html.CheckBoxFor(model => model.selecionado3) *@
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-line">
+                            <label asp-for="resposta4" class="control-label">Respostas 4</label>
+                            <input asp-for="resposta4" type="text" class="form-control" placeholder="Digite uma respostas">
+                            @* <label class="control-label">Correta</label>
+                            @Html.CheckBoxFor(model => model.selecionado4) *@
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-line">
+                            <label asp-for="resposta5" class="control-label ">Respostas 5</label>
+                            <input asp-for="resposta5" type="text" class="form-control" placeholder="Digite uma respostas" heigth="50%">
+                            @* <label class="control-label">Correta</label>
+                            @Html.CheckBoxFor(model => model.selecionado5) *@
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <input type="submit" value="Salvar" class="btn bg-teal waves-effect col-sm-2" /> <text>  </text>
+                        @Html.ActionLink("Voltar", "Index", "Pergunta", null, new { @class = "btn bg-warning waves-effect col-sm-2" })
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
