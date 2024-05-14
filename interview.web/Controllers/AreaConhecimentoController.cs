@@ -56,11 +56,17 @@ namespace interview.web.Controllers
                 ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
                 return RedirectToAction("Index", "Home");
             }
-            
+
         }
 
-        
-        [HttpPost]
+        public async Task<ActionResult> Create()
+        {
+            return PartialView("_Create", new AreaConhecimentoViewModel());
+
+        }
+
+
+        [HttpPut]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(AreaConhecimentoViewModel areaConhecimentoViewModel, [FromServices] IMemoryCache cache)
         {
@@ -80,6 +86,25 @@ namespace interview.web.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Save(AreaConhecimentoViewModel areaConhecimentoViewModel, [FromServices] IMemoryCache cache)
+        {
+            try
+            {
+                var token = base.GetToken(cache);
+                string url = $"{_config.Url}AreaConhecimento";
+                var response = await _post.PostCustomAsync(areaConhecimentoViewModel, url, token);
+                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, response);
+            }
+            catch (Exception e)
+            {
+                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
+                
+            }
+            return RedirectToAction("Index", "AreaConhecimento");
+        }
+
         public async Task<ActionResult> Delete(string id, [FromServices] IMemoryCache cache)
         {
             try
@@ -92,9 +117,9 @@ namespace interview.web.Controllers
             catch (Exception e)
             {
                 ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
-                
+
             }
-            return RedirectToAction("Index", "AreaConhecinmento");
+            return RedirectToAction("Index", "AreaConhecimento");
         }
 
         private async Task<AreaConhecimentoViewModel> GetAreaConhecimento(Guid id, IMemoryCache cache)
