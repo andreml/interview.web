@@ -50,5 +50,24 @@ namespace interview.web.Controllers
             return PartialView("_Create", new QuestionarioViewModel());
 
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Save(AdicionarQuestionarioViewModel adicionarQuestionarioViewModel, [FromServices] IMemoryCache cache)
+        {
+            try
+            {
+                var token = base.GetToken(cache);
+                string url = $"{_config.Url}Questionario";
+                var response = await _post.PostCustomAsync(adicionarQuestionarioViewModel, url, token);
+                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, response);
+            }
+            catch (Exception e)
+            {
+                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
+
+            }
+            return RedirectToAction("Index", "Questionario");
+        }
     }
 }
