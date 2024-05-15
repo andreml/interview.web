@@ -15,23 +15,34 @@
                 <th style="text-align:center">Ações</th>
                 </thead>
                 <tbody>
-                    <tr>
-                        @foreach (var item in Model)
-                        {
+                    @foreach (var item in Model)
+                    {
+                        <tr style="text-align:center">
                             <td style="text-align:center">
                                 @Html.DisplayFor(modelItem => item.descricao)
                             </td>
                             <td style="text-align:center">
                                 @Html.DisplayFor(modelItem => item.areaConhecimento)
                             </td>
-                            <td style="text-align:center">
-                                @Html.ActionLink("", "Edit", new { id = item.id }, new { @class = "btn bg-teal waves-effect col-sm-2 glyphicon glyphicon-pencil" })
+                            <td style="display:flex;justify-content:center">
+                                @Html.ActionLink("", "Edit", new { id = item.id }, new { @class = "btn bg-teal waves-effect col-sm-2 glyphicon glyphicon-pencil" }) <text> <b>|</b> </text>
                                 @Html.ActionLink("", "Delete", new { id = item.id }, new { @class = "btn bg-danger waves-effect col-sm-2 glyphicon glyphicon-trash text-white" })
                             </td>
-                        }
-                    </tr>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
+        <div class="alert">
+            @Html.Raw(ViewBag.Alert);
+        </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".alert").fadeTo(4000, 300).slideDown(300, function () {
+            $(".alert").slideDown(300);;
+        })
+    });
+</script>

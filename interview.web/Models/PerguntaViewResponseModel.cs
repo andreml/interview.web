@@ -14,6 +14,18 @@
         public bool correta { get; set; }
     }
 
+    public class PerguntaViewRequestModel
+    {
+        public string areaConhecimento { get; set; }
+        public string descricao { get; set; }
+        public List<AlternativaRequest> alternativas { get; set; }
+    }
+    public class AlternativaRequest
+    {
+        public string descricao { get; set; }
+        public bool correta { get; set; }
+    }
+
     public class PerguntaViewModel
     {
         public string id { get; set; }

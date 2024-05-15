@@ -42,49 +42,59 @@
                         <div class="form-line">
                             <label asp-for="resposta1" class="control-label">Respostas 1</label>
                             <input asp-for="resposta1" type="text" class="form-control" placeholder="Digite uma respostas">
-                            @* <label class="control-label">Correta</label>
-                            @Html.CheckBoxFor(model => model.selecionado1) *@
+                            <input asp-for="correta1" type="checkbox" class="ch" >
+                            <label for="correta1">Resposta correta</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="form-line">
                             <label asp-for="resposta2" class="control-label">Respostas 2</label>
                             <input asp-for="resposta2" type="text" class="form-control" placeholder="Digite uma respostas">
-                            @* <label class="control-label">Correta</label>
-                            @Html.CheckBoxFor(model => model.selecionado2) *@
+                            <input asp-for="correta2" type="checkbox" class="ch" >
+                            <label for="correta2">Resposta correta</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="form-line">
                             <label asp-for="resposta3" class="control-label">Respostas 3</label>
                             <input asp-for="resposta3" type="text" class="form-control" placeholder="Digite uma respostas">
-                            @* <label class="control-label">Correta</label>
-                            @Html.CheckBoxFor(model => model.selecionado3) *@
+                            <input asp-for="correta3" type="checkbox" class="ch" >
+                            <label for="correta3">Resposta correta</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="form-line">
                             <label asp-for="resposta4" class="control-label">Respostas 4</label>
                             <input asp-for="resposta4" type="text" class="form-control" placeholder="Digite uma respostas">
-                            @* <label class="control-label">Correta</label>
-                            @Html.CheckBoxFor(model => model.selecionado4) *@
+                            <input asp-for="correta4" type="checkbox" class="ch" >
+                            <label for="correta4">Resposta correta</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="form-line">
                             <label asp-for="resposta5" class="control-label ">Respostas 5</label>
                             <input asp-for="resposta5" type="text" class="form-control" placeholder="Digite uma respostas" heigth="50%">
-                            <input asp-for="correta5" type="checkbox" />
-                            @* <label class="control-label">Correta</label>
-                            @Html.CheckBoxFor(model => model.selecionado5) *@
+                            <input asp-for="correta5" type="checkbox" class="ch" >
+                            <label for="correta5">Resposta correta</label>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <input type="submit" value="Salvar" class="btn bg-teal waves-effect col-sm-2" /> <text>  </text>
-                        @Html.ActionLink("Voltar", "Index", "Pergunta", null, new { @class = "btn bg-warning waves-effect col-sm-2" })
+                    <div style="display:block;justify-content:center">
+                        <input type="submit" value="Salvar" class="btn bg-teal waves-effect col-sm-2" />
+                        @Html.ActionLink("Voltar", "Index", "Pergunta", null, new { @class = "btn bg-warning waves-effect col-sm-2 text-white" })
                     </div>
                 </div>
             </form>
         </div>
     </div>
+    <div class="alert">
+        @Html.Raw(ViewBag.Alert);
+    </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".alert").fadeTo(4000, 300).slideDown(300, function () {
+            $(".alert").slideDown(300);;
+        })
+    });
+</script>
