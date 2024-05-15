@@ -14,11 +14,11 @@ namespace interview.web.Controllers
     {
         IGetServices<IEnumerable<PerguntaViewResponseModel>> _get;
         IPostServices<string> _post;
-        IPutServices<IEnumerable<string>> _put;
+        IPutServices<string> _put;
         AppConfig _config;
         public PerguntaController(IGetServices<IEnumerable<PerguntaViewResponseModel>> get,
                                   IPostServices<string> post,
-                                  IPutServices<IEnumerable<string>> put,
+                                  IPutServices<string> put,
                                   IOptions<AppConfig> options)
         {
             _get = get;
