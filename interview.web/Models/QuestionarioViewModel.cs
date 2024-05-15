@@ -22,4 +22,11 @@
         public string Descricao { get; set; } = default!;
         public bool Correta { get; set; }
     }
+
+    public class AdicionarQuestionarioViewModel
+    {
+        public Guid UsuarioId { get; set; }
+        public string Nome { get; set; } = default!;
+        public ICollection<Guid> Perguntas { get; set; } = default!;
+    }
 }
