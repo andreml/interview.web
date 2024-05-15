@@ -1,7 +1,7 @@
 ﻿@model PerguntaViewModel
 
 @{
-    ViewData["Title"] = "Cadastro de perguntas";
+    ViewData["Title"] = "Atualizar pergunta";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -18,13 +18,14 @@
             </h2>
         </div>
         <div class="body">
-            <form asp-action="Create">
+            <form asp-action="Edit">
                 <div class="row clearfix">
                     <div class="col-md-12">
                         <div class="form-group">
                             <div class="form-line">
                                 <label asp-for="descricao" class="control-label">Pergunta</label>
-                                <input asp-for="descricao" type="text" class="form-control" placeholder="Digite a pergunta">
+                                <input asp-for="descricao" type="text" class="form-control">
+                                <input asp-for="id" type="text" class="form-control" hidden></input>
                             </div>
                         </div>
                     </div>
@@ -32,52 +33,52 @@
                         <div class="form-group">
                             <div class="form-line">
                                 <label asp-for="areaConhecimento" class="control-label">Area de Conhecimento</label>
-                                <input asp-for="areaConhecimento" type="text" class="form-control" placeholder="Digite a area de conhecimento">
+                                <input asp-for="areaConhecimento" type="text" class="form-control">
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-8">
                     <div class="form-group">
                         <div class="form-line">
                             <label asp-for="resposta1" class="control-label">Respostas 1</label>
-                            <input asp-for="resposta1" type="text" class="form-control" placeholder="Digite uma respostas">
-                            @* <label class="control-label">Correta</label>
-                            @Html.CheckBoxFor(model => model.selecionado1) *@
+                            <input asp-for="resposta1" type="text" class="form-control">
+                            @* <input type="checkbox" id="basic_checkbox_1" checked=""> *@
                         </div>
+                        <input type="checkbox" id="correta1" checked="@Model.correta1">
+                        <label for="correta1">Resposta correta</label>
                     </div>
                     <div class="form-group">
                         <div class="form-line">
                             <label asp-for="resposta2" class="control-label">Respostas 2</label>
-                            <input asp-for="resposta2" type="text" class="form-control" placeholder="Digite uma respostas">
-                            @* <label class="control-label">Correta</label>
-                            @Html.CheckBoxFor(model => model.selecionado2) *@
+                            <input asp-for="resposta2" type="text" class="form-control">
                         </div>
+                        <input type="checkbox" id="correta2" checked="@Model.correta2">
+                        <label for="correta2">Resposta correta</label>
                     </div>
                     <div class="form-group">
                         <div class="form-line">
                             <label asp-for="resposta3" class="control-label">Respostas 3</label>
-                            <input asp-for="resposta3" type="text" class="form-control" placeholder="Digite uma respostas">
-                            @* <label class="control-label">Correta</label>
-                            @Html.CheckBoxFor(model => model.selecionado3) *@
+                            <input asp-for="resposta3" type="text" class="form-control">
+                            <input type="checkbox" id="correta3" checked="@Model.correta3">
+                            <label for="correta3">Resposta correta</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="form-line">
                             <label asp-for="resposta4" class="control-label">Respostas 4</label>
-                            <input asp-for="resposta4" type="text" class="form-control" placeholder="Digite uma respostas">
-                            @* <label class="control-label">Correta</label>
-                            @Html.CheckBoxFor(model => model.selecionado4) *@
+                            <input asp-for="resposta4" type="text" class="form-control">
                         </div>
+                        <input type="checkbox" id="correta4" checked="@Model.correta4">
+                        <label for="correta4">Resposta correta</label>
                     </div>
                     <div class="form-group">
                         <div class="form-line">
                             <label asp-for="resposta5" class="control-label ">Respostas 5</label>
-                            <input asp-for="resposta5" type="text" class="form-control" placeholder="Digite uma respostas" heigth="50%">
-                            <input asp-for="correta5" type="checkbox" />
-                            @* <label class="control-label">Correta</label>
-                            @Html.CheckBoxFor(model => model.selecionado5) *@
+                            <input asp-for="resposta5" type="text" class="form-control">
                         </div>
+                        <input type="checkbox" id="correta5" checked="@Model.correta5">
+                        <label for="correta5">Resposta correta</label>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <input type="submit" value="Salvar" class="btn bg-teal waves-effect col-sm-2" /> <text>  </text>

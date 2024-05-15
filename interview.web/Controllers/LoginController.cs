@@ -40,7 +40,7 @@ namespace interview.web.Controllers
                 cache.Set<string>("token", response.token);
                 return RedirectToAction("Index", "Home", new { token = response.token });
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
                 return View(nameof(Index));
