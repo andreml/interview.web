@@ -24,6 +24,11 @@ namespace interview.web.App.Services
                     var response = client.GetAsync(urlPath).Result;
                     var stringResponse = response.Content.ReadAsStringAsync().Result;
 
+                    if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+                    {
+                        return null;
+                    }
+
                     if (response.IsSuccessStatusCode)
                     {
                         var deserializeResult = JsonConvert.DeserializeObject<T>(stringResponse);
