@@ -1,7 +1,12 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Questionario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Questionarios</h1>
+<div>
+    @Html.ActionLink("Cadastrar", "Create", "Questionario", null, new { @class = "btn bg-teal waves-effect col-sm-1" })
+</div>
+<section id="PartialViewListarQuestionarios">
+    <partial name="~/Views/Questionario/_List.cshtml" />
+</section>
