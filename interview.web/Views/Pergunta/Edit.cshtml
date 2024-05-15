@@ -14,7 +14,7 @@
     <div class="card">
         <div class="header">
             <h2>
-                Cadastrar nova pergunta
+                Atualizar pergunta e respostas
             </h2>
         </div>
         <div class="body">
@@ -43,9 +43,8 @@
                         <div class="form-line">
                             <label asp-for="resposta1" class="control-label">Respostas 1</label>
                             <input asp-for="resposta1" type="text" class="form-control">
-                            @* <input type="checkbox" id="basic_checkbox_1" checked=""> *@
                         </div>
-                        <input type="checkbox" id="correta1" checked="@Model.correta1">
+                        <input asp-for="correta1" type="checkbox" class="ch">
                         <label for="correta1">Resposta correta</label>
                     </div>
                     <div class="form-group">
@@ -53,23 +52,23 @@
                             <label asp-for="resposta2" class="control-label">Respostas 2</label>
                             <input asp-for="resposta2" type="text" class="form-control">
                         </div>
-                        <input type="checkbox" id="correta2" checked="@Model.correta2">
+                        <input asp-for="correta2" type="checkbox" class="ch">
                         <label for="correta2">Resposta correta</label>
                     </div>
                     <div class="form-group">
                         <div class="form-line">
                             <label asp-for="resposta3" class="control-label">Respostas 3</label>
                             <input asp-for="resposta3" type="text" class="form-control">
-                            <input type="checkbox" id="correta3" checked="@Model.correta3">
-                            <label for="correta3">Resposta correta</label>
                         </div>
+                        <input asp-for="correta3" type="checkbox" class="ch">
+                        <label for="correta3">Resposta correta</label>
                     </div>
                     <div class="form-group">
                         <div class="form-line">
                             <label asp-for="resposta4" class="control-label">Respostas 4</label>
                             <input asp-for="resposta4" type="text" class="form-control">
                         </div>
-                        <input type="checkbox" id="correta4" checked="@Model.correta4">
+                        <input asp-for="correta4" type="checkbox" class="ch">
                         <label for="correta4">Resposta correta</label>
                     </div>
                     <div class="form-group">
@@ -77,15 +76,25 @@
                             <label asp-for="resposta5" class="control-label ">Respostas 5</label>
                             <input asp-for="resposta5" type="text" class="form-control">
                         </div>
-                        <input type="checkbox" id="correta5" checked="@Model.correta5">
+                        <input asp-for="correta5" type="checkbox" class="ch">
                         <label for="correta5">Resposta correta</label>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <input type="submit" value="Salvar" class="btn bg-teal waves-effect col-sm-2" /> <text>  </text>
-                        @Html.ActionLink("Voltar", "Index", "Pergunta", null, new { @class = "btn bg-warning waves-effect col-sm-2" })
+                    <div style="display:flex;justify-content:center">
+                        <input type="submit" value="Salvar" class="btn bg-teal waves-effect col-sm-2" />
+                        @Html.ActionLink("Voltar", "Index", "Pergunta", null, new { @class = "btn bg-warning waves-effect col-sm-2 text-white" })
                     </div>
                 </div>
             </form>
         </div>
+        <div class="alert">
+            @Html.Raw(ViewBag.Alert);
+        </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".alert").fadeTo(4000, 300).slideDown(300, function () {
+            $(".alert").slideDown(300);;
+        })
+    });
+</script>

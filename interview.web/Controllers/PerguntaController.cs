@@ -5,25 +5,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using NuGet.DependencyResolver;
 using static interview.web.Models.Enums.Enumerator;
 
 namespace interview.web.Controllers
 {
     public class PerguntaController : BaseController
     {
-        IGetServices<IEnumerable<PerguntaViewResponseModel>> _get;
-        IPostServices<string> _post;
-        IPutServices<string> _put;
-        AppConfig _config;
+        private readonly IGetServices<IEnumerable<PerguntaViewResponseModel>> _get;
+        private readonly IPostServices<string> _post;
+        private readonly IPutServices<string> _put;
+        private readonly IDeleteServices<string> _delete;
+        private readonly AppConfig _config;
         public PerguntaController(IGetServices<IEnumerable<PerguntaViewResponseModel>> get,
                                   IPostServices<string> post,
                                   IPutServices<string> put,
+                                  IDeleteServices<string> delete,
                                   IOptions<AppConfig> options)
         {
             _get = get;
             _post = post;
             _put = put;
+            _delete = delete;
             _config = options.Value;
         }
         public async Task<IActionResult> Index([FromServices] IMemoryCache cache, string? perguntaId, string? areaConhecimento, string? descricao)
@@ -47,9 +49,30 @@ namespace interview.web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IFormCollection collection)
+        public async Task<IActionResult> Create(IFormCollection collection, [FromServices] IMemoryCache cache)
         {
-            return View();
+            try
+            {
+                var token = this.GetToken(cache);
+                var url = _config.Url + "Pergunta";
+                var body = new PerguntaViewRequestModel() { descricao = collection["descricao"].ToString(), areaConhecimento = collection["areaConhecimento"].ToString(), alternativas = new List<AlternativaRequest>() };
+
+                body.alternativas.Add(new AlternativaRequest() { descricao = collection["resposta1"]!.ToString(), correta = bool.Parse(collection["correta1"]!.First()!.ToString()) });
+                body.alternativas.Add(new AlternativaRequest() { descricao = collection["resposta2"]!.ToString(), correta = bool.Parse(collection["correta2"]!.First()!.ToString()) });
+                body.alternativas.Add(new AlternativaRequest() { descricao = collection["resposta3"]!.ToString(), correta = bool.Parse(collection["correta3"]!.First()!.ToString()) });
+                body.alternativas.Add(new AlternativaRequest() { descricao = collection["resposta4"]!.ToString(), correta = bool.Parse(collection["correta4"]!.First()!.ToString()) });
+                body.alternativas.Add(new AlternativaRequest() { descricao = collection["resposta5"]!.ToString(), correta = bool.Parse(collection["correta5"]!.First()!.ToString()) });
+                body.alternativas.RemoveAll(p => string.IsNullOrEmpty(p.descricao));
+
+                var response = await _post.PostCustomAsync(body, url, token);
+                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, response);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
+                return View();
+            }
         }
 
         public async Task<IActionResult> Edit([FromServices] IMemoryCache cache, string id)
@@ -112,21 +135,16 @@ namespace interview.web.Controllers
                 var token = this.GetToken(cache);
                 string url = _config.Url + "Pergunta";
 
-                var request = new PerguntaViewResponseModel() { id = collection["id"].ToString(), descricao = collection["descricao"].ToString(), areaConhecimento = collection["areaConhecimento"].ToString() };
-                request.alternativas = new List<Alternativa>();
-                //request.alternativas.Add(new Alternativa() { descricao = collection["resposta1"]!.ToString(), correta = bool.Parse(collection["correta1"]!.ToString()) });
-                //request.alternativas.Add(new Alternativa() { descricao = collection["resposta2"]!.ToString(), correta = bool.Parse(collection["correta2"]!.ToString()) });
-                //request.alternativas.Add(new Alternativa() { descricao = collection["resposta3"]!.ToString(), correta = bool.Parse(collection["correta3"]!.ToString()) });
-                //request.alternativas.Add(new Alternativa() { descricao = collection["resposta4"]!.ToString(), correta = bool.Parse(collection["correta4"]!.ToString()) });
-                //request.alternativas.Add(new Alternativa() { descricao = collection["resposta5"]!.ToString(), correta = bool.Parse(collection["correta5"]!.ToString()) });
+                var body = new PerguntaViewResponseModel() { id = collection["id"].ToString(), descricao = collection["descricao"].ToString(), areaConhecimento = collection["areaConhecimento"].ToString() };
+                body.alternativas = new List<Alternativa>();
+                body.alternativas.Add(new Alternativa() { descricao = collection["resposta1"]!.ToString(), correta = bool.Parse(collection["correta1"]!.First()!.ToString()) });
+                body.alternativas.Add(new Alternativa() { descricao = collection["resposta2"]!.ToString(), correta = bool.Parse(collection["correta2"]!.First()!.ToString()) });
+                body.alternativas.Add(new Alternativa() { descricao = collection["resposta3"]!.ToString(), correta = bool.Parse(collection["correta3"]!.First()!.ToString()) });
+                body.alternativas.Add(new Alternativa() { descricao = collection["resposta4"]!.ToString(), correta = bool.Parse(collection["correta4"]!.First()!.ToString()) });
+                body.alternativas.Add(new Alternativa() { descricao = collection["resposta5"]!.ToString(), correta = bool.Parse(collection["correta5"]!.First()!.ToString()) });
+                body.alternativas.RemoveAll(p => string.IsNullOrEmpty(p.descricao));
 
-                request.alternativas.Add(new Alternativa() { descricao = collection["resposta1"]!.ToString(), correta = true });
-                request.alternativas.Add(new Alternativa() { descricao = collection["resposta2"]!.ToString(), correta = false });
-                request.alternativas.Add(new Alternativa() { descricao = collection["resposta3"]!.ToString(), correta = false });
-                request.alternativas.Add(new Alternativa() { descricao = collection["resposta4"]!.ToString(), correta = false });
-                request.alternativas.Add(new Alternativa() { descricao = collection["resposta5"]!.ToString(), correta = false });
-                var body = JsonConvert.SerializeObject(request);
-                var response = await _put.PutCustomAsync(request, url, token);
+                var response = await _put.PutCustomAsync(body, url, token);
 
                 return RedirectToAction("Index");
             }
@@ -134,6 +152,32 @@ namespace interview.web.Controllers
             {
                 ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
                 return View(new PerguntaViewResponseModel() { alternativas = new List<Alternativa>() });
+            }
+        }
+
+        public async Task<IActionResult> Delete([FromServices] IMemoryCache cache, string id)
+        {
+            var response = this.ObterPerguntas(cache, id, null, null).Result.FirstOrDefault();
+            return View(response);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(IFormCollection collection, [FromServices] IMemoryCache cache)
+        {
+            try
+            {
+                var token = this.GetToken(cache);
+                var url = _config.Url + "Pergunta";
+
+                var response = await _delete.DeleteByIdCustomAsync(url, token, collection["id"].ToString());
+                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, response);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
+                return View();
             }
         }
 
