@@ -2,7 +2,6 @@
 using interview.web.Config;
 using interview.web.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Build.Logging;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using static interview.web.Models.Enums.Enumerator;
@@ -32,9 +31,13 @@ namespace interview.web.Controllers
         {
             try
             {
+                var mensagem = (string)TempData["MensagemAreaConhecimento"]!;
+                if (!string.IsNullOrEmpty(mensagem))
+                    ViewBag.Alert = mensagem;
+
                 var token = base.GetToken(cache);
                 string url = _config.Url + "AreaConhecimento";
-                var response = await _get.GetCustomAsync(url, token);
+                var response = (await _get.GetCustomAsync(url, token)) ?? new List<AreaConhecimentoViewModel>();
                 return View(response);
             }
             catch (Exception e)
@@ -66,7 +69,7 @@ namespace interview.web.Controllers
         }
 
 
-        [HttpPut]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(AreaConhecimentoViewModel areaConhecimentoViewModel, [FromServices] IMemoryCache cache)
         {
@@ -75,8 +78,10 @@ namespace interview.web.Controllers
                 var token = base.GetToken(cache);
                 string url = $"{_config.Url}AreaConhecimento";
                 var response = await _put.PutCustomAsync(areaConhecimentoViewModel, url, token);
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, response);
-                var updated = GetAreaConhecimento(areaConhecimentoViewModel.id.Value, cache);
+
+                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, "Area de Conhecimento alterada");
+
+                var updated = GetAreaConhecimento(areaConhecimentoViewModel.id!.Value, cache);
                 return PartialView("_Edit", updated.Result);
             }
             catch (Exception e)
@@ -95,12 +100,11 @@ namespace interview.web.Controllers
                 var token = base.GetToken(cache);
                 string url = $"{_config.Url}AreaConhecimento";
                 var response = await _post.PostCustomAsync(areaConhecimentoViewModel, url, token);
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, response);
+                TempData["MensagemAreaConhecimento"] = Utility.Utils.ShowAlert(Alerts.Success, "Area de Conhecimento adicionada");
             }
             catch (Exception e)
             {
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
-                
+                TempData["MensagemAreaConhecimento"] = Utility.Utils.ShowAlert(Alerts.Error, e.Message);   
             }
             return RedirectToAction("Index", "AreaConhecimento");
         }
@@ -112,12 +116,11 @@ namespace interview.web.Controllers
                 var token = base.GetToken(cache);
                 string url = $"{_config.Url}AreaConhecimento";
                 var response = await _delete.DeleteByIdCustomAsync(url, token, id);
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, response);
+                TempData["MensagemAreaConhecimento"] = Utility.Utils.ShowAlert(Alerts.Success, "Area de Conhecimento excluida");
             }
             catch (Exception e)
             {
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
-
+                TempData["MensagemAreaConhecimento"] = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
             }
             return RedirectToAction("Index", "AreaConhecimento");
         }

@@ -32,7 +32,7 @@ namespace interview.web.Controllers
         {
             try
             {
-                var response = await this.ObterPerguntas(cache, perguntaId, areaConhecimento, descricao);
+                var response = await ObterPerguntas(cache, perguntaId, areaConhecimento, descricao);
                 return View(response);
             }
             catch (Exception e)
@@ -191,7 +191,8 @@ namespace interview.web.Controllers
             parametros.Add("areaConhecimento", areaConhecimento!);
             parametros.Add("descricao", descricao!);
 
-            return await _get.GetCustomQueryIdAsync(url, token, parametros);
+            return (await _get.GetCustomQueryIdAsync(url, token, parametros)) 
+                        ?? new List<PerguntaViewResponseModel>();
         }
     }
 }
