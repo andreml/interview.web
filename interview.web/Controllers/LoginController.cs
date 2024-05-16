@@ -21,10 +21,10 @@ namespace interview.web.Controllers
         }
         public ActionResult Index()
         {
-            var mensagem = TempData["mensagem"] as string;
+            var mensagem = TempData["MensagemLogin"] as string;
 
             if (!string.IsNullOrEmpty(mensagem))
-                ViewBag.Alert = Utils.ShowAlert(Alerts.Success, mensagem);
+                ViewBag.Alert = mensagem;
 
             return View(nameof(Index));
         }

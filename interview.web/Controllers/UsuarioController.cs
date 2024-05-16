@@ -2,6 +2,7 @@
 using interview.web.Config;
 using interview.web.Models;
 using interview.web.Models.Enums;
+using interview.web.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
@@ -33,7 +34,7 @@ namespace interview.web.Controllers
             }
             catch (Exception e)
             {
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
+                ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
                 return RedirectToAction("Index", "Home");
             }
         }
@@ -69,13 +70,13 @@ namespace interview.web.Controllers
 
                 var response = await _post.PostCustomAsync(body, url, string.Empty);
 
-                TempData["mensagem"] = "Usuário adicionado com sucesso! Realize o login para se autenticar";
+                TempData["MensagemLogin"] = Utils.ShowAlert(Alerts.Success, "Usuário adicionado com sucesso! Realize o login para se autenticar");
 
                 return RedirectToAction("Index", "/");
             }
             catch (Exception e)
             {
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
+                ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
                 return View();
             }
         }

@@ -31,6 +31,10 @@ namespace interview.web.Controllers
         {
             try
             {
+                var mensagem = (string)TempData["MensagemAreaConhecimento"]!;
+                if (!string.IsNullOrEmpty(mensagem))
+                    ViewBag.Alert = mensagem;
+
                 var token = base.GetToken(cache);
                 string url = _config.Url + "AreaConhecimento";
                 var response = (await _get.GetCustomAsync(url, token)) ?? new List<AreaConhecimentoViewModel>();
@@ -74,6 +78,7 @@ namespace interview.web.Controllers
                 var token = base.GetToken(cache);
                 string url = $"{_config.Url}AreaConhecimento";
                 var response = await _put.PutCustomAsync(areaConhecimentoViewModel, url, token);
+
                 ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, response);
                 var updated = GetAreaConhecimento(areaConhecimentoViewModel.id.Value, cache);
                 return PartialView("_Edit", updated.Result);
@@ -94,12 +99,11 @@ namespace interview.web.Controllers
                 var token = base.GetToken(cache);
                 string url = $"{_config.Url}AreaConhecimento";
                 var response = await _post.PostCustomAsync(areaConhecimentoViewModel, url, token);
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, response);
+                TempData["MensagemAreaConhecimento"] = Utility.Utils.ShowAlert(Alerts.Success, "Area de Conhecimento adicionada");
             }
             catch (Exception e)
             {
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
-                
+                TempData["MensagemAreaConhecimento"] = Utility.Utils.ShowAlert(Alerts.Error, e.Message);   
             }
             return RedirectToAction("Index", "AreaConhecimento");
         }
@@ -111,12 +115,11 @@ namespace interview.web.Controllers
                 var token = base.GetToken(cache);
                 string url = $"{_config.Url}AreaConhecimento";
                 var response = await _delete.DeleteByIdCustomAsync(url, token, id);
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, response);
+                TempData["MensagemAreaConhecimento"] = Utility.Utils.ShowAlert(Alerts.Success, "Area de Conhecimento excluida");
             }
             catch (Exception e)
             {
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
-
+                TempData["MensagemAreaConhecimento"] = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
             }
             return RedirectToAction("Index", "AreaConhecimento");
         }
