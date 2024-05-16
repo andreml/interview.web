@@ -69,7 +69,7 @@ namespace interview.web.Controllers
         }
 
 
-        [HttpPut]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(AreaConhecimentoViewModel areaConhecimentoViewModel, [FromServices] IMemoryCache cache)
         {
@@ -79,8 +79,9 @@ namespace interview.web.Controllers
                 string url = $"{_config.Url}AreaConhecimento";
                 var response = await _put.PutCustomAsync(areaConhecimentoViewModel, url, token);
 
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, response);
-                var updated = GetAreaConhecimento(areaConhecimentoViewModel.id.Value, cache);
+                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, "Area de Conhecimento alterada");
+
+                var updated = GetAreaConhecimento(areaConhecimentoViewModel.id!.Value, cache);
                 return PartialView("_Edit", updated.Result);
             }
             catch (Exception e)
