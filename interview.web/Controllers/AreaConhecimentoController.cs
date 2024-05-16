@@ -2,7 +2,6 @@
 using interview.web.Config;
 using interview.web.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Build.Logging;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using static interview.web.Models.Enums.Enumerator;
@@ -34,7 +33,7 @@ namespace interview.web.Controllers
             {
                 var token = base.GetToken(cache);
                 string url = _config.Url + "AreaConhecimento";
-                var response = await _get.GetCustomAsync(url, token);
+                var response = (await _get.GetCustomAsync(url, token)) ?? new List<AreaConhecimentoViewModel>();
                 return View(response);
             }
             catch (Exception e)

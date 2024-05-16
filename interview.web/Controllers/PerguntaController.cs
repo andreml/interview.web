@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using NuGet.DependencyResolver;
 using static interview.web.Models.Enums.Enumerator;
 
 namespace interview.web.Controllers
@@ -30,7 +29,7 @@ namespace interview.web.Controllers
         {
             try
             {
-                var response = await this.ObterPerguntas(cache, perguntaId, areaConhecimento, descricao);
+                var response = await ObterPerguntas(cache, perguntaId, areaConhecimento, descricao);
                 return View(response);
             }
             catch (Exception e)
@@ -147,7 +146,8 @@ namespace interview.web.Controllers
             parametros.Add("areaConhecimento", areaConhecimento!);
             parametros.Add("descricao", descricao!);
 
-            return await _get.GetCustomQueryIdAsync(url, token, parametros);
+            return (await _get.GetCustomQueryIdAsync(url, token, parametros)) 
+                        ?? new List<PerguntaViewResponseModel>();
         }
     }
 }
