@@ -1,7 +1,7 @@
-﻿@model QuestionarioViewModel
+﻿@model AdicionarQuestionarioViewModel
 
 @{
-    ViewData["Title"] = "Áreas de conhecimento";
+    ViewData["Title"] = "Questionário";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,7 +9,7 @@
     <div class="card">
         <div class="header">
             <h2>
-                Alterar Area de Conhecimento
+                Criar Questionário
             </h2>
         </div>
         <div class="body">
@@ -22,28 +22,11 @@
                                 <input asp-for="@Model.Nome" type="text" class="form-control">
                             </div>
                         </div>
-                    </div>
-                    <div class="form-line">
-                        <input type="submit" value="Salvar" class="btn btn-primary" />
-                    </div>
-                    @foreach (var item in Model.Perguntas)
-                    {
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <label asp-for="@item" class="control-label">Descrição</label>
-                                    <input asp-for="@item.Descricao" type="text" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-
-                    </div>
+                    <partial name="_ListPergunta"/>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <div class="form-group">
                             <div class="form-line">
-                                <input type="submit" value="Salvar" class="btn btn-primary"/>
+                                <input type="submit" value="Salvar" class="btn btn-primary" />
                                 @Html.ActionLink("Voltar", "Index")
                             </div>
                         </div>

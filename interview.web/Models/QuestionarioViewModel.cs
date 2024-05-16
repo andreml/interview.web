@@ -7,6 +7,7 @@
         public DateTime? DataCriacao { get; set; }
         public int? AvaliacoesRespondidas { get; set; }
         public ICollection<PerguntaQuestionarioViewModelAvaliador> Perguntas { get; set; } = default!;
+
     }
 
     public class PerguntaQuestionarioViewModelAvaliador

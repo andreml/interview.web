@@ -47,7 +47,7 @@ namespace interview.web.Controllers
 
         public async Task<ActionResult> Create()
         {
-            return PartialView("_Create", new QuestionarioViewModel());
+            return PartialView("_Create", new AdicionarQuestionarioViewModel());
 
         }
 
