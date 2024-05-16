@@ -1,6 +1,7 @@
 ﻿using interview.web.App.Interfaces;
 using interview.web.Config;
 using interview.web.Models;
+using interview.web.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
@@ -56,12 +57,21 @@ namespace interview.web.Controllers
         {
             try
             {
-                var token = this.GetToken(cache);
                 var url = _config.Url + "Usuario";
-                var body = new UsuarioViewModel() { cpf = collection["cpf"].ToString(), login = collection["cpf"].ToString(), nome = collection["cpf"].ToString(), perfil = collection["cpf"].ToString(), senha = collection["cpf"].ToString() };
-                var response = await _post.PostCustomAsync(body, url, token);
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, response);
-                return RedirectToAction(nameof(Index));
+                var body = new UsuarioViewModel()
+                {
+                    cpf = collection["cpf"].ToString(),
+                    login = collection["login"].ToString(),
+                    nome = collection["nome"].ToString(),
+                    perfil = (Perfil)Enum.Parse(typeof(Perfil), collection["perfil"].ToString()),
+                    senha = collection["senha"].ToString()
+                };
+
+                var response = await _post.PostCustomAsync(body, url, string.Empty);
+
+                TempData["mensagem"] = "Usuário adicionado com sucesso! Realize o login para se autenticar";
+
+                return RedirectToAction("Index", "/");
             }
             catch (Exception e)
             {

@@ -19,7 +19,15 @@ namespace interview.web.Controllers
             _postService = postService;
             _config = options.Value;
         }
-        public ActionResult Index() => View();
+        public ActionResult Index()
+        {
+            var mensagem = TempData["mensagem"] as string;
+
+            if (!string.IsNullOrEmpty(mensagem))
+                ViewBag.Alert = Utils.ShowAlert(Alerts.Success, mensagem);
+
+            return View(nameof(Index));
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
