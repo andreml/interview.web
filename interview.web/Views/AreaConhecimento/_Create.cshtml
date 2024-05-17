@@ -6,7 +6,7 @@
 }
 
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <div class="card">
+    <div class="card" style="margin-top: 100px;">
         <div class="header">
             <h2>
                 Alterar Area de Conhecimento
@@ -15,7 +15,7 @@
         <div class="body">
             <form asp-action="Save">
                 <div class="row clearfix">
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
                         <div class="form-group">
                             <div class="form-line">
                                 <label asp-for="descricao" class="control-label">Descrição</label>
@@ -23,12 +23,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-top: 17px">
                         <div class="form-group">
-                            <div class="form-line">
-                                <input type="submit" value="Salvar" class="btn btn-primary"/>
-                                @Html.ActionLink("Voltar", "Index")
-                            </div>
+
+                            @Html.ActionLink("Voltar", "Index")
+
+                            <input type="submit" value="Salvar" class="btn btn-primary" />
+
                         </div>
                     </div>
                 </div>
