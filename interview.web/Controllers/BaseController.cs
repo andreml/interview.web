@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
+using static interview.web.Models.Enums.Enumerator;
 
 namespace interview.web.Controllers
 {
@@ -15,13 +16,14 @@ namespace interview.web.Controllers
         {
         }
 
-        public string GetToken(IMemoryCache cache)
-        {
-            string? token = cache.Get("token")?.ToString();
-            if (token is null)
-                throw new Exception("Sessão expirou");
-            return token;
-        }
+        public string? GetToken(IMemoryCache cache) =>
+            cache.Get("token")?.ToString();
 
+        public IActionResult RedirecionarParaLogin()
+        {
+            TempData["MensagemLogin"] = Utility.Utils.ShowAlert(Alerts.Error, "Realize o login novamente");
+
+            return RedirectToAction("Index", "/");
+        }
     }
 }
