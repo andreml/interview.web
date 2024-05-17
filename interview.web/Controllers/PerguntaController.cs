@@ -4,7 +4,6 @@ using interview.web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using static interview.web.Models.Enums.Enumerator;
 
 namespace interview.web.Controllers
@@ -32,7 +31,11 @@ namespace interview.web.Controllers
         {
             try
             {
-                var response = await ObterPerguntas(cache, perguntaId, areaConhecimento, descricao);
+                var token = GetToken(cache);
+                if (token == null)
+                    return RedirecionarParaLogin();
+
+                var response = await ObterPerguntas(token, perguntaId, areaConhecimento, descricao);
                 return View(response);
             }
             catch (Exception e)
@@ -53,7 +56,10 @@ namespace interview.web.Controllers
         {
             try
             {
-                var token = this.GetToken(cache);
+                var token = GetToken(cache);
+                if (token == null)
+                    return RedirecionarParaLogin();
+
                 var url = _config.Url + "Pergunta";
                 var body = new PerguntaViewRequestModel() { descricao = collection["descricao"].ToString(), areaConhecimento = collection["areaConhecimento"].ToString(), alternativas = new List<AlternativaRequest>() };
 
@@ -79,7 +85,11 @@ namespace interview.web.Controllers
         {
             try
             {
-                var response = this.ObterPerguntas(cache, id, null, null).Result.FirstOrDefault();
+                var token = GetToken(cache);
+                if (token == null)
+                    return RedirecionarParaLogin();
+
+                var response = this.ObterPerguntas(token, id, null, null).Result.FirstOrDefault();
                 var result = new PerguntaViewModel();
                 result.id = id;
                 result.descricao = response.descricao;
@@ -132,7 +142,10 @@ namespace interview.web.Controllers
         {
             try
             {
-                var token = this.GetToken(cache);
+                var token = GetToken(cache);
+                if (token == null)
+                    return RedirecionarParaLogin();
+
                 string url = _config.Url + "Pergunta";
 
                 var body = new PerguntaViewResponseModel() { id = collection["id"].ToString(), descricao = collection["descricao"].ToString(), areaConhecimento = collection["areaConhecimento"].ToString() };
@@ -157,7 +170,11 @@ namespace interview.web.Controllers
 
         public async Task<IActionResult> Delete([FromServices] IMemoryCache cache, string id)
         {
-            var response = this.ObterPerguntas(cache, id, null, null).Result.FirstOrDefault();
+            var token = GetToken(cache);
+            if (token == null)
+                return RedirecionarParaLogin();
+
+            var response = this.ObterPerguntas(token, id, null, null).Result.FirstOrDefault();
             return View(response);
         }
 
@@ -167,7 +184,10 @@ namespace interview.web.Controllers
         {
             try
             {
-                var token = this.GetToken(cache);
+                var token = GetToken(cache);
+                if (token == null)
+                    return RedirecionarParaLogin();
+
                 var url = _config.Url + "Pergunta";
 
                 var response = await _delete.DeleteByIdCustomAsync(url, token, collection["id"].ToString());
@@ -181,9 +201,8 @@ namespace interview.web.Controllers
             }
         }
 
-        private async Task<IEnumerable<PerguntaViewResponseModel>> ObterPerguntas(IMemoryCache cache, string? perguntaId, string? areaConhecimento, string? descricao)
+        private async Task<IEnumerable<PerguntaViewResponseModel>> ObterPerguntas(string token, string? perguntaId, string? areaConhecimento, string? descricao)
         {
-            var token = this.GetToken(cache);
             string url = _config.Url + "Pergunta";
 
             var parametros = new Dictionary<string, object>();
