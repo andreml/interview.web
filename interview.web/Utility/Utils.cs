@@ -11,16 +11,16 @@ namespace interview.web.Utility
             switch (obj)
             {
                 case Alerts.Success:
-                    alertDiv = "";
+                    alertDiv = $"<div class='alert alert-success alert-dismissible' id='alert'><button type='button' class='close' data-dismiss='alert'>X</button><strong> </ strong > {message}</a>.</div>";
                     break;
                 case Alerts.Error:
-                    alertDiv = "";
+                    alertDiv = $"<div class='alert alert-danger alert-dismissible' id='alert'><button type='button' class='close' data-dismiss='alert'>X</button><strong> </ strong > {message}</a>.</div>"; ;
                     break;
                 case Alerts.Info:
-                    alertDiv = "";
+                    alertDiv = $"<div class='alert alert-info alert-dismissible' id='alert'><button type='button' class='close' data-dismiss='alert'>X</button><strong> </ strong > {message}</a>.</div>";
                     break;
                 case Alerts.Warning:
-                    alertDiv = "";
+                    alertDiv = $"<div class='alert alert-warning alert-dismissible' id='alert'><button type='button' class='close' data-dismiss='alert'>X</button><strong> </ strong > {message}</a>.</div>"; ;
                     break;
             }
 

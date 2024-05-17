@@ -19,7 +19,15 @@ namespace interview.web.Controllers
             _postService = postService;
             _config = options.Value;
         }
-        public ActionResult Index() => View();
+        public ActionResult Index()
+        {
+            var mensagem = TempData["MensagemLogin"] as string;
+
+            if (!string.IsNullOrEmpty(mensagem))
+                ViewBag.Alert = mensagem;
+
+            return View(nameof(Index));
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -40,7 +48,7 @@ namespace interview.web.Controllers
                 cache.Set<string>("token", response.token);
                 return RedirectToAction("Index", "Home", new { token = response.token });
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
                 return View(nameof(Index));

@@ -59,6 +59,10 @@
         </main>
     </div>
 
+    <div class="alert">
+        @Html.Raw(ViewBag.Alert);
+    </div>
+
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2024 - Skill Check
@@ -73,6 +77,7 @@
     <script src="~/material-design/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
     <script src="~/material-design/plugins/node-waves/waves.js"></script>
     <script src="~/material-design/plugins/jquery-countto/jquery.countTo.js"></script>
+    <script src="~/js/site.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

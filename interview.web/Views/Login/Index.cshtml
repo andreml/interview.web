@@ -38,19 +38,22 @@
                         <span class="input-group-addon">
                             <i class="material-icons">person</i>
                         </span>
-                    <div class="form-line">
-                        <input asp-for="login" type="text" class="form-control" name="login" placeholder="Digite seu login" required autofocus />
-                    </div>
+                        <div class="form-line">
+                            <input asp-for="login" type="text" class="form-control" name="login" placeholder="Digite seu login" required autofocus />
+                        </div>
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon">
                             <i class="material-icons">person</i>
                         </span>
-                    <div class="form-line">
-                        <input asp-for="senha" type="password" class="form-control" name="senha" placeholder="Digite sua senha" required autofocus />
-                    </div>
+                        <div class="form-line">
+                            <input asp-for="senha" type="password" class="form-control" name="senha" placeholder="Digite sua senha" required autofocus />
+                        </div>
                     </div>
                     <div class="row">
+                        <div class="col-xs-8">
+                            <a href="Usuario/Create">Crie um usuário aqui</a>
+                        </div>
                         <div class="col-xs-4">
                             <button class="btn btn-outline-light" type="submit">Login</button>
                         </div>
@@ -60,6 +63,7 @@
         </div>
         <div class="alert">
             @Html.Raw(ViewBag.Alert);
+            @Html.Raw($"<script>console.log('{ViewBag.Alert}')</script>");
         </div>
     </div>
 </body>
@@ -70,13 +74,6 @@
 <script src="~/material-design/plugins/jquery-validation/jquery.validate.js"></script>
 <script src="~/material-design/js/admin.js"></script>
 <script src="~/material-design/js/pages/examples/sign-in.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $(".alert").fadeTo(4000, 300).slideDown(300, function () {
-            $(".alert").slideDown(300);;
-        })
-    });
-</script>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

@@ -1,7 +1,7 @@
 ﻿using interview.web.App.Interfaces;
 using interview.web.Models;
-using Microsoft.CodeAnalysis.Operations;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace interview.web.App.Services
 {
@@ -12,7 +12,8 @@ namespace interview.web.App.Services
         {
             _http = http;
         }
-        public async Task<T> GetCustomAsync(string urlPath, string token)
+
+        public async Task<T?> GetCustomAsync(string urlPath, string token)
         {
             try
             {
@@ -32,7 +33,12 @@ namespace interview.web.App.Services
                     if (response.IsSuccessStatusCode)
                     {
                         var deserializeResult = JsonConvert.DeserializeObject<T>(stringResponse);
-                        if (deserializeResult != null) return await Task.FromResult(deserializeResult);
+
+                        if (deserializeResult != null)
+                            return await Task.FromResult(deserializeResult);
+                        else if (response.StatusCode == HttpStatusCode.NoContent)
+                            return null;
+
                         else throw new Exception($"Não foi possível deserializar o retorno da API {urlPath}");
                     }
                     else

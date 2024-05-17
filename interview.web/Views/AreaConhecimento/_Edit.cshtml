@@ -6,7 +6,7 @@
 }
 
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <div class="card">
+    <div class="card" style="margin-top: 100px;">
         <div class="header">
             <h2>
                 Alterar Area de Conhecimento
@@ -14,8 +14,8 @@
         </div>
         <div class="body">
             <form asp-action="Edit">
-                <div class="row clearfix">
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
                         <div class="form-group">
                             <div class="form-line">
                                 <label asp-for="id" class="control-label">Id</label>
@@ -23,7 +23,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                         <div class="form-group">
                             <div class="form-line">
                                 <label asp-for="descricao" class="control-label">Descrição</label>
@@ -31,13 +31,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <input type="submit" value="Salvar" class="btn btn-primary"/>
-                                @Html.ActionLink("Voltar", "Index")
-                            </div>
-                        </div>
+                </div>
+                <div class="row justify-content-end">
+                    <div class="col-2" style='text-align: right;'>
+                        @Html.ActionLink("Voltar", "Index")
+
+                        <input type="submit" value="Salvar" class="btn btn-primary" />
                     </div>
                 </div>
             </form>

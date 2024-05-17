@@ -12,37 +12,37 @@
                 <thead>
                 <th style="text-align:center">Pergunta</th>
                 <th style="text-align:center">Area de Conhecimento</th>
-                <th style="text-align:center">Respostas</th>
                 <th style="text-align:center">Ações</th>
                 </thead>
                 <tbody>
-                    <tr>
-                        @foreach (var item in Model)
-                        {
+                    @foreach (var item in Model)
+                    {
+                        <tr style="text-align:center">
                             <td style="text-align:center">
                                 @Html.DisplayFor(modelItem => item.descricao)
                             </td>
                             <td style="text-align:center">
                                 @Html.DisplayFor(modelItem => item.areaConhecimento)
                             </td>
-                            <td style="text-align:center">
-                                @foreach (var a in item.alternativas)
-                                {
-                                    @Html.DisplayFor(modelItem => a.descricao)
-
-                                    <br />
-                                    @Html.DisplayFor(modelItem => a.correta)
-                                }
+                            <td style="display:flex;justify-content:center">
+                                @Html.ActionLink("", "Edit", new { id = item.id }, new { @class = "btn bg-teal waves-effect col-sm-2 glyphicon glyphicon-pencil" }) <text> <b>|</b> </text>
+                                @Html.ActionLink("", "Delete", new { id = item.id }, new { @class = "btn bg-danger waves-effect col-sm-2 glyphicon glyphicon-trash text-white" })
                             </td>
-                            <td style="text-align:center">
-                                @Html.ActionLink("Alterar", "Edit", new { /* id=item.PrimaryKey */ }, new { @class = "btn bg-teal waves-effect col-sm-2" })
-                                <text> | </text>
-                                @Html.ActionLink("Excluir", "Delete", new { /* id=item.PrimaryKey */ }, new { @class = "btn bg-warning waves-effect col-sm-2" })
-                            </td>
-                        }
-                    </tr>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
+        <div class="alert">
+            @Html.Raw(ViewBag.Alert);
+        </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".alert").fadeTo(4000, 300).slideDown(300, function () {
+            $(".alert").slideDown(300);;
+        })
+    });
+</script>
