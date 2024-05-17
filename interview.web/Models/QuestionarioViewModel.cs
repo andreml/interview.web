@@ -12,9 +12,7 @@
 
     public class PerguntaQuestionarioViewModelAvaliador
     {
-        public Guid Id { get; set; }
-        public string Descricao { get; set; } = default!;
-        public ICollection<AlternativaPerguntaQuestionarioViewModelAvaliador> Alternativas { get; set; } = default!;
+        public string Id { get; set; }
     }
 
     public class AlternativaPerguntaQuestionarioViewModelAvaliador
@@ -28,6 +26,6 @@
     {
         public Guid UsuarioId { get; set; }
         public string Nome { get; set; } = default!;
-        public ICollection<Guid> Perguntas { get; set; } = default!;
+        public ICollection<PerguntaQuestionarioViewModelAvaliador> Perguntas { get; set; }
     }
 }

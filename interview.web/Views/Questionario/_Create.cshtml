@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Questionário";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    string descricao = "";
 }
 
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -22,12 +23,18 @@
                                 <input asp-for="@Model.Nome" type="text" class="form-control">
                             </div>
                         </div>
-                    <partial name="_ListPergunta"/>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <input type="submit" value="Salvar" class="btn btn-primary" />
-                                @Html.ActionLink("Voltar", "Index")
+                        <h2>
+                            Perguntas
+                        </h2>
+                        <input asp-for="@descricao" type="text" class="form-control" />
+                        <button asp-action="PerguntaAdicionar">Adicionar Pergunta</button>
+                        <partial name="_ListPergunta" , model="@Model.Perguntas" />
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="submit" value="Salvar" class="btn btn-primary" />
+                                    @Html.ActionLink("Voltar", "Index")
+                                </div>
                             </div>
                         </div>
                     </div>
