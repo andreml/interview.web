@@ -35,10 +35,13 @@ namespace interview.web.App.Services
                     else
                     {
                         var erroObj = JsonConvert.DeserializeObject<ErrorViewModel>(stringResponse);
-                        string msg = string.Empty;
-                        foreach (var item in erroObj?.mensagens!) msg += msg + Environment.NewLine;
 
-                        throw new Exception(msg);
+                        var mensagem = "Erro ao processar a requisição";
+
+                        if (erroObj != null && erroObj.mensagens != null && erroObj.mensagens.Any())
+                            mensagem = string.Join("; ", erroObj!.mensagens!);
+
+                        throw new Exception(mensagem);
                     }
                 }
             }

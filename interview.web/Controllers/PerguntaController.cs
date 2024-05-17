@@ -148,7 +148,7 @@ namespace interview.web.Controllers
 
                 string url = _config.Url + "Pergunta";
 
-                var body = new PerguntaViewResponseModel() { id = collection["id"].ToString(), descricao = collection["descricao"].ToString(), areaConhecimento = collection["areaConhecimento"].ToString() };
+                var body = new PerguntaViewResponseModel() { id = Guid.Parse(collection["id"]!), descricao = collection["descricao"].ToString(), areaConhecimento = collection["areaConhecimento"].ToString() };
                 body.alternativas = new List<Alternativa>();
                 body.alternativas.Add(new Alternativa() { descricao = collection["resposta1"]!.ToString(), correta = bool.Parse(collection["correta1"]!.First()!.ToString()) });
                 body.alternativas.Add(new Alternativa() { descricao = collection["resposta2"]!.ToString(), correta = bool.Parse(collection["correta2"]!.First()!.ToString()) });
