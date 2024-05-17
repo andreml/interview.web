@@ -1,0 +1,52 @@
+﻿@using interview.web.Models.Response;
+@model IEnumerable<GetQuestionarioResponse>
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="card">
+        <div class="header">
+            <h2>
+                Questionários Cadastrados
+            </h2>
+        </div>
+        <div class="body table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="text-align:center">Nome</th>
+                        <th style="text-align:center">Data de Criação</th>
+                        <th style="text-align:center">Avaliações Enviadas</th>
+                        <th style="text-align:center"></th>
+                        <th style="text-align:center"></th>
+                        <th style="text-align:center"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.HiddenFor(modelItem => item.Id)
+                                @Html.DisplayFor(modelItem => item.Nome)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DataCriacao)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AvaliacoesEnviadas)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Enviar para Candidato", "ExibirTelaEnviarParaCandidato", new { item.Id }, new { @class = "btn bg-primary waves-effect col-sm-2 col-lg-10" })
+                            </td>
+                            <td>
+                                @Html.ActionLink("Alterar", "ExibirTelaCriarAlterar", new { item.Id }, new { @class = "btn bg-teal waves-effect col-sm-2 col-lg-10" })
+                            </td>
+                            <td>
+                                @Html.ActionLink("Excluir", "Delete", new { item.Id }, new { @class = "btn bg-warning waves-effect col-sm-2 col-lg-10" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

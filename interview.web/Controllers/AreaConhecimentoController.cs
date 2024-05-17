@@ -4,7 +4,6 @@ using interview.web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using NuGet.Common;
 using static interview.web.Models.Enums.Enumerator;
 
 namespace interview.web.Controllers
@@ -30,6 +29,7 @@ namespace interview.web.Controllers
             _put = put;
             _delete = delete;
         }
+
         public async Task<IActionResult> Index([FromServices] IMemoryCache cache)
         {
             try
@@ -53,7 +53,32 @@ namespace interview.web.Controllers
             }
         }
 
-        public async Task<IActionResult> Details(Guid id, [FromServices] IMemoryCache cache)
+        public async Task<IActionResult> ExibirTelaCriarAlterar(string id, [FromServices] IMemoryCache cache)
+        {
+            var token = GetToken(cache);
+            if (token == null)
+                return RedirecionarParaLogin();
+
+            AreaConhecimentoViewModel areaConhecimento;
+
+            if (!string.IsNullOrEmpty(id))
+            {
+                areaConhecimento = await GetAreaConhecimento(Guid.Parse(id), token);
+            }
+            else
+            {
+                areaConhecimento = new AreaConhecimentoViewModel
+                {
+                    descricao = string.Empty
+                };
+            }
+
+            return PartialView("_CreateEdit", areaConhecimento);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AdicionarAlterarQuestionario(AreaConhecimentoViewModel areaConhecimentoViewModel, [FromServices] IMemoryCache cache)
         {
             try
             {
@@ -61,68 +86,30 @@ namespace interview.web.Controllers
                 if (token == null)
                     return RedirecionarParaLogin();
 
-                var response = await GetAreaConhecimento(id, token);
-                return PartialView("_Edit", response);
+                //Criacao
+                if (areaConhecimentoViewModel.id == null || areaConhecimentoViewModel.id == Guid.Empty)
+                {
+                    await _post.PostCustomAsync(areaConhecimentoViewModel, $"{_config.Url}AreaConhecimento", token);
+
+                    TempData["MensagemAreaConhecimento"] =
+                        Utility.Utils.ShowAlert(Alerts.Success, "Area de Conhecimento adicionada");
+                }
+                //Alteracao
+                else
+                {
+                    await _put.PutCustomAsync(areaConhecimentoViewModel, $"{_config.Url}AreaConhecimento", token);
+
+                    TempData["MensagemAreaConhecimento"] = 
+                        Utility.Utils.ShowAlert(Alerts.Success, "Area de Conhecimento alterada");
+                }
+
+                return RedirectToAction("Index");
             }
             catch (Exception e)
             {
                 ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
                 return RedirectToAction("Index", "Home");
             }
-
-        }
-
-        public async Task<ActionResult> Create()
-        {
-            return PartialView("_Create", new AreaConhecimentoViewModel());
-
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(AreaConhecimentoViewModel areaConhecimentoViewModel, [FromServices] IMemoryCache cache)
-        {
-            try
-            {
-                var token = GetToken(cache);
-                if (token == null)
-                    return RedirecionarParaLogin();
-
-                string url = $"{_config.Url}AreaConhecimento";
-                var response = await _put.PutCustomAsync(areaConhecimentoViewModel, url, token);
-
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, "Area de Conhecimento alterada");
-
-                var updated = GetAreaConhecimento(areaConhecimentoViewModel.id!.Value, token);
-                return PartialView("_Edit", updated.Result);
-            }
-            catch (Exception e)
-            {
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
-                return RedirectToAction("Index", "Home");
-            }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Save(AreaConhecimentoViewModel areaConhecimentoViewModel, [FromServices] IMemoryCache cache)
-        {
-            try
-            {
-                var token = GetToken(cache);
-                if (token == null)
-                    return RedirecionarParaLogin();
-
-                string url = $"{_config.Url}AreaConhecimento";
-                var response = await _post.PostCustomAsync(areaConhecimentoViewModel, url, token);
-                TempData["MensagemAreaConhecimento"] = Utility.Utils.ShowAlert(Alerts.Success, "Area de Conhecimento adicionada");
-            }
-            catch (Exception e)
-            {
-                TempData["MensagemAreaConhecimento"] = Utility.Utils.ShowAlert(Alerts.Error, e.Message);   
-            }
-            return RedirectToAction("Index", "AreaConhecimento");
         }
 
         public async Task<IActionResult> Delete(string id, [FromServices] IMemoryCache cache)
@@ -133,15 +120,17 @@ namespace interview.web.Controllers
                 if (token == null)
                     return RedirecionarParaLogin();
 
-                string url = $"{_config.Url}AreaConhecimento";
-                var response = await _delete.DeleteByIdCustomAsync(url, token, id);
-                TempData["MensagemAreaConhecimento"] = Utility.Utils.ShowAlert(Alerts.Success, "Area de Conhecimento excluida");
+                var response = await _delete.DeleteByIdCustomAsync($"{_config.Url}AreaConhecimento", token, id);
+
+                TempData["MensagemAreaConhecimento"] =
+                    Utility.Utils.ShowAlert(Alerts.Success, "Area de Conhecimento excluída");
             }
             catch (Exception e)
             {
                 TempData["MensagemAreaConhecimento"] = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
             }
-            return RedirectToAction("Index", "AreaConhecimento");
+
+            return RedirectToAction("Index");
         }
 
         private async Task<AreaConhecimentoViewModel> GetAreaConhecimento(Guid id, string token)

@@ -1,0 +1,64 @@
+﻿@using interview.web.Models.View;
+@model QuestionarioViewModel
+
+@{
+    ViewData["Title"] = "Questionário";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string Acao = string.IsNullOrEmpty(Model.Id) ? "Cadastrar" : "Alterar";
+}
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="card" style="margin-top: 100px;">
+        <div class="header">
+            <h2>
+                @Acao Questionário
+            </h2>
+        </div>
+        <div class="body">
+            <form asp-action="AdicionarAlterarQuestionario">
+                @Html.HiddenFor(modelItem => Model.Id)
+                <div class="row">
+                    <div class="form-line" style="padding: 0 35px 0 35px;">
+                        <label asp-for="NomeQuestionario" class="control-label">Nome do questionário</label>
+                        <input asp-for="NomeQuestionario" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="body table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Incluir</th>
+                                <th>Area de Conhecimento</th>
+                                <th>Pergunta</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Perguntas.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" asp-for="Perguntas[i].Selecionada" style="opacity:1; left:60px" />
+                                        <input type="hidden" asp-for="Perguntas[i].Id" />
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(model => Model.Perguntas[i].AreaConhecimento)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(model => Model.Perguntas[i].Descricao)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row justify-content-end">
+                    <div class="col-2" style='text-align: right;'>
+                        @Html.ActionLink("Voltar", "Index")
+
+                        <input type="submit" value="@Acao" class="btn btn-primary" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

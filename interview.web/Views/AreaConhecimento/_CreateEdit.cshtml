@@ -3,27 +3,21 @@
 @{
     ViewData["Title"] = "Áreas de conhecimento";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    string Acao = (Model.id == null || Model.id == Guid.Empty) ? "Cadastrar" : "Alterar";
 }
 
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="card" style="margin-top: 100px;">
         <div class="header">
             <h2>
-                Alterar Area de Conhecimento
+                @Acao Area de Conhecimento
             </h2>
         </div>
         <div class="body">
-            <form asp-action="Edit">
+            <form asp-action="AdicionarAlterarQuestionario">
+                @Html.HiddenFor(modelItem => Model.id)
                 <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <label asp-for="id" class="control-label">Id</label>
-                                <input asp-for="@Model.id" type="text" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
                             <div class="form-line">
                                 <label asp-for="descricao" class="control-label">Descrição</label>
@@ -36,7 +30,7 @@
                     <div class="col-2" style='text-align: right;'>
                         @Html.ActionLink("Voltar", "Index")
 
-                        <input type="submit" value="Salvar" class="btn btn-primary" />
+                        <input type="submit" value="@Acao" class="btn btn-primary" />
                     </div>
                 </div>
             </form>

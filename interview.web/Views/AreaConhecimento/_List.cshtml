@@ -11,28 +11,25 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th style="text-align:center">Id</th>
                         <th style="text-align:center">Descrição</th>
                         <th style="text-align:center">Perguntas Cadastradas</th>
-                        <th style="text-align:center">Alterar</th>
-                        <th style="text-align:center">Excluir</th>
+                        <th style="text-align:center"></th>
+                        <th style="text-align:center"></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.id)
-                            </td>
-                            <td>
+                            <td style="text-align:center">
+                                @Html.HiddenFor(modelItem => item.id)
                                 @Html.DisplayFor(modelItem => item.descricao)
                             </td>
-                            <td>
+                            <td style="text-align:center">
                                 @Html.DisplayFor(modelItem => item.perguntasCadastradas)
                             </td>
                             <td>
-                                @Html.ActionLink("Alterar", "Details", new { id = item.id }, new { @class = "btn bg-teal waves-effect col-sm-2 col-lg-10" })
+                                @Html.ActionLink("Alterar", "ExibirTelaCriarAlterar", new { id = item.id }, new { @class = "btn bg-teal waves-effect col-sm-2 col-lg-10" })
                             </td>
                             <td>
                                 @Html.ActionLink("Excluir", "Delete", new { id = item.id.ToString() }, new { @class = "btn bg-warning waves-effect col-sm-2 col-lg-10" })

@@ -2,7 +2,7 @@
 {
     public class PerguntaViewResponseModel
     {
-        public string id { get; set; }
+        public Guid id { get; set; }
         public string areaConhecimento { get; set; }
         public string descricao { get; set; }
         public List<Alternativa> alternativas { get; set; }
