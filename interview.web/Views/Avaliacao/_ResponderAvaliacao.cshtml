@@ -6,6 +6,19 @@
     Layout = "~/Views/Shared/_LayoutCandidato.cshtml";
 }
 
+@{
+    string styles = @" .material-line {
+            border: none;
+            height: 1px;
+            background-color: #e0e0e0;
+            margin: 20px 0;
+        }";
+}
+
+<style>
+    @Html.Raw(styles)
+</style>
+
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="card" style="margin-top: 100px;">
         <div class="header">
@@ -21,11 +34,9 @@
                 {
                     @Html.HiddenFor(modelItem => Model.Perguntas[i].Id)
 
-                    <div class="row clearfix">
+                    <div class="row clearfix" style="padding-left: 15px;">
                         <div class="col-md-12">
-                            <div class="form-group">
-                                <b>@Model.Perguntas[i].Descricao</b>
-                            </div>
+                            <b>@Model.Perguntas[i].Descricao</b>
                         </div>
                     </div>
                     <div class="col-md-12">
