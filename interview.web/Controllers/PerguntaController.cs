@@ -1,6 +1,7 @@
 ﻿using interview.web.App.Interfaces;
 using interview.web.Config;
 using interview.web.Models;
+using interview.web.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
@@ -35,17 +36,21 @@ namespace interview.web.Controllers
                 if (token == null)
                     return RedirecionarParaLogin();
 
+                var mensagem = (string)TempData["MensagemPergunta"]!;
+                if (!string.IsNullOrEmpty(mensagem))
+                    ViewBag.Alert = mensagem;
+
                 var response = await ObterPerguntas(token, perguntaId, areaConhecimento, descricao);
                 return View(response);
             }
             catch (Exception e)
             {
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
-                return View(new PerguntaViewResponseModel() { alternativas = new List<Alternativa>() });
+                ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
+                return View(new PerguntaViewResponseModel() { Alternativas = new List<Alternativa>() });
             }
         }
 
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -61,22 +66,35 @@ namespace interview.web.Controllers
                     return RedirecionarParaLogin();
 
                 var url = _config.Url + "Pergunta";
-                var body = new PerguntaViewRequestModel() { descricao = collection["descricao"].ToString(), areaConhecimento = collection["areaConhecimento"].ToString(), alternativas = new List<AlternativaRequest>() };
+                var body = new PerguntaViewRequestModel
+                {
+                    Descricao = collection["descricao"].ToString(),
+                    AreaConhecimento = collection["areaConhecimento"].ToString(),
+                    Alternativas = new List<AlternativaRequest>()
+                    {
+                        new AlternativaRequest(collection["resposta1"]!, false),
+                        new AlternativaRequest(collection["resposta2"]!, false),
+                        new AlternativaRequest(collection["resposta3"]!, false),
+                        new AlternativaRequest(collection["resposta4"]!, false),
+                        new AlternativaRequest(collection["resposta5"]!, false),
+                    }
+                };
 
-                body.alternativas.Add(new AlternativaRequest() { descricao = collection["resposta1"]!.ToString(), correta = bool.Parse(collection["correta1"]!.First()!.ToString()) });
-                body.alternativas.Add(new AlternativaRequest() { descricao = collection["resposta2"]!.ToString(), correta = bool.Parse(collection["correta2"]!.First()!.ToString()) });
-                body.alternativas.Add(new AlternativaRequest() { descricao = collection["resposta3"]!.ToString(), correta = bool.Parse(collection["correta3"]!.First()!.ToString()) });
-                body.alternativas.Add(new AlternativaRequest() { descricao = collection["resposta4"]!.ToString(), correta = bool.Parse(collection["correta4"]!.First()!.ToString()) });
-                body.alternativas.Add(new AlternativaRequest() { descricao = collection["resposta5"]!.ToString(), correta = bool.Parse(collection["correta5"]!.First()!.ToString()) });
-                body.alternativas.RemoveAll(p => string.IsNullOrEmpty(p.descricao));
+                int alternativaCorreta = int.Parse(collection["radio-correta"]!);
+                body.Alternativas[alternativaCorreta - 1].Correta = true;
 
-                var response = await _post.PostCustomAsync(body, url, token);
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, response);
+                body.Alternativas.RemoveAll(p => string.IsNullOrEmpty(p.Descricao) && !p.Correta);
+
+                await _post.PostCustomAsync(body, url, token);
+
+                TempData["MensagemPergunta"] =
+                        Utils.ShowAlert(Alerts.Success, "Pergunta adicionada com sucesso");
+
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception e)
             {
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
+                ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
                 return View();
             }
         }
@@ -89,36 +107,39 @@ namespace interview.web.Controllers
                 if (token == null)
                     return RedirecionarParaLogin();
 
-                var response = this.ObterPerguntas(token, id, null, null).Result.FirstOrDefault();
-                var result = new PerguntaViewModel();
-                result.id = id;
-                result.descricao = response.descricao;
-                result.areaConhecimento = response.areaConhecimento;
-                int count = 1;
+                var response = (await ObterPerguntas(token, id, null, null)).FirstOrDefault();
 
-                for (int i = 0; i < response!.alternativas.Count; i++)
+                var result = new PerguntaViewModel()
+                {
+                    Id = Guid.Parse(id),
+                    Descricao = response!.Descricao,
+                    AreaConhecimento = response.AreaConhecimento
+                };
+
+                int count = 1;
+                for (int i = 0; i < response!.Alternativas.Count; i++)
                 {
                     switch (count)
                     {
                         case 1:
-                            result.resposta1 = response!.alternativas[i].descricao;
-                            result.correta1 = response.alternativas[i].correta;
+                            result.Resposta1 = response!.Alternativas[i].Descricao;
+                            result.Correta1 = response.Alternativas[i].Correta;
                             break;
                         case 2:
-                            result.resposta2 = response!.alternativas[i].descricao;
-                            result.correta2 = response.alternativas[i].correta;
+                            result.Resposta2 = response!.Alternativas[i].Descricao;
+                            result.Correta2 = response.Alternativas[i].Correta;
                             break;
                         case 3:
-                            result.resposta3 = response!.alternativas[i].descricao;
-                            result.correta3 = response.alternativas[i].correta;
+                            result.Resposta3 = response!.Alternativas[i].Descricao;
+                            result.Correta3 = response.Alternativas[i].Correta;
                             break;
                         case 4:
-                            result.resposta4 = response!.alternativas[i].descricao;
-                            result.correta4 = response.alternativas[i].correta;
+                            result.Resposta4 = response!.Alternativas[i].Descricao;
+                            result.Correta4 = response.Alternativas[i].Correta;
                             break;
                         case 5:
-                            result.resposta5 = response!.alternativas[i].descricao;
-                            result.correta5 = response.alternativas[i].correta;
+                            result.Resposta5 = response!.Alternativas[i].Descricao;
+                            result.Correta5 = response.Alternativas[i].Correta;
                             break;
                         default:
                             break;
@@ -132,7 +153,7 @@ namespace interview.web.Controllers
             catch (Exception e)
             {
                 ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
-                return View(new PerguntaViewResponseModel() { alternativas = new List<Alternativa>() });
+                return View(new PerguntaViewResponseModel() { Alternativas = new List<Alternativa>() });
             }
         }
 
@@ -148,23 +169,37 @@ namespace interview.web.Controllers
 
                 string url = _config.Url + "Pergunta";
 
-                var body = new PerguntaViewResponseModel() { id = Guid.Parse(collection["id"]!), descricao = collection["descricao"].ToString(), areaConhecimento = collection["areaConhecimento"].ToString() };
-                body.alternativas = new List<Alternativa>();
-                body.alternativas.Add(new Alternativa() { descricao = collection["resposta1"]!.ToString(), correta = bool.Parse(collection["correta1"]!.First()!.ToString()) });
-                body.alternativas.Add(new Alternativa() { descricao = collection["resposta2"]!.ToString(), correta = bool.Parse(collection["correta2"]!.First()!.ToString()) });
-                body.alternativas.Add(new Alternativa() { descricao = collection["resposta3"]!.ToString(), correta = bool.Parse(collection["correta3"]!.First()!.ToString()) });
-                body.alternativas.Add(new Alternativa() { descricao = collection["resposta4"]!.ToString(), correta = bool.Parse(collection["correta4"]!.First()!.ToString()) });
-                body.alternativas.Add(new Alternativa() { descricao = collection["resposta5"]!.ToString(), correta = bool.Parse(collection["correta5"]!.First()!.ToString()) });
-                body.alternativas.RemoveAll(p => string.IsNullOrEmpty(p.descricao));
+                var body = new PerguntaViewResponseModel() 
+                { 
+                    Id = Guid.Parse(collection["id"]!), 
+                    Descricao = collection["descricao"]!, 
+                    AreaConhecimento = collection["areaConhecimento"]!,
+                    Alternativas = new List<Alternativa>()
+                    {
+                        new Alternativa(collection["resposta1"]!, false),
+                        new Alternativa(collection["resposta2"]!, false),
+                        new Alternativa(collection["resposta3"]!, false),
+                        new Alternativa(collection["resposta4"]!, false),
+                        new Alternativa(collection["resposta5"]!, false),
+                    }
+                };
 
-                var response = await _put.PutCustomAsync(body, url, token);
+                int alternativaCorreta = int.Parse(collection["radio-correta"]!);
+                body.Alternativas[alternativaCorreta - 1].Correta = true;
+
+                body.Alternativas.RemoveAll(p => string.IsNullOrEmpty(p.Descricao) && !p.Correta);
+
+                await _put.PutCustomAsync(body, url, token);
+
+                TempData["MensagemPergunta"] = 
+                        Utils.ShowAlert(Alerts.Success, "Pergunta alterada com sucesso");
 
                 return RedirectToAction("Index");
             }
             catch (Exception e)
             {
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
-                return View(new PerguntaViewResponseModel() { alternativas = new List<Alternativa>() });
+                ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
+                return View(new PerguntaViewResponseModel() { Alternativas = new List<Alternativa>() });
             }
         }
 
@@ -174,7 +209,7 @@ namespace interview.web.Controllers
             if (token == null)
                 return RedirecionarParaLogin();
 
-            var response = this.ObterPerguntas(token, id, null, null).Result.FirstOrDefault();
+            var response = (await ObterPerguntas(token, id, null, null)).FirstOrDefault();
             return View(response);
         }
 
@@ -191,12 +226,15 @@ namespace interview.web.Controllers
                 var url = _config.Url + "Pergunta";
 
                 var response = await _delete.DeleteByIdCustomAsync(url, token, collection["id"].ToString());
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Success, response);
-                return RedirectToAction(nameof(Index));
+
+                TempData["MensagemPergunta"] =
+                        Utils.ShowAlert(Alerts.Success, "Pergunta excluída com sucesso");
+
+                return RedirectToAction("Index");
             }
             catch (Exception e)
             {
-                ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
+                ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
                 return View();
             }
         }
@@ -205,10 +243,12 @@ namespace interview.web.Controllers
         {
             string url = _config.Url + "Pergunta";
 
-            var parametros = new Dictionary<string, object>();
-            parametros.Add("perguntaId", perguntaId!);
-            parametros.Add("areaConhecimento", areaConhecimento!);
-            parametros.Add("descricao", descricao!);
+            var parametros = new Dictionary<string, object>()
+            {
+                {"perguntaId", perguntaId! },
+                {"areaConhecimento", areaConhecimento! },
+                {"descricao", descricao! },
+            };
 
             return (await _get.GetCustomQueryIdAsync(url, token, parametros)) 
                         ?? new List<PerguntaViewResponseModel>();

@@ -34,13 +34,13 @@ namespace interview.web.Controllers
         {
             try
             {
-                var mensagem = (string)TempData["MensagemAreaConhecimento"]!;
-                if (!string.IsNullOrEmpty(mensagem))
-                    ViewBag.Alert = mensagem;
-
                 var token = GetToken(cache);
                 if (token == null)
                     return RedirecionarParaLogin();
+
+                var mensagem = (string)TempData["MensagemAreaConhecimento"]!;
+                if (!string.IsNullOrEmpty(mensagem))
+                    ViewBag.Alert = mensagem;
 
                 string url = _config.Url + "AreaConhecimento";
                 var response = (await _get.GetCustomAsync(url, token)) ?? new List<AreaConhecimentoViewModel>();
