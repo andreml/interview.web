@@ -12,24 +12,25 @@ namespace interview.web.Controllers
 {
     public class UsuarioController : BaseController
     {
-        IGetServices<UsuarioViewResponseModel> _get;
-        IPostServices<string> _post;
-        AppConfig _config;
+        readonly IGetServices<UsuarioViewResponseModel> _get;
+        readonly IPostServices<string> _post;
+        readonly IPutServices<string> _put;
+        readonly AppConfig _config;
         public UsuarioController(IGetServices<UsuarioViewResponseModel> get,
                                  IPostServices<string> post,
+                                 IPutServices<string> put,
                                  IOptions<AppConfig> options)
         {
             _get = get;
             _post = post;
             _config = options.Value;
+            _put = put;
         }
         public async Task<IActionResult> Index([FromServices] IMemoryCache cache)
         {
             try
             {
-                var token = this.GetToken(cache);
-                string url = _config.Url + "Usuario";
-                var response = await _get.GetCustomAsync(url, token);
+                UsuarioViewResponseModel? response = await GetUsuario(cache);
                 return View(response);
             }
             catch (BadHttpRequestException e)
@@ -39,10 +40,29 @@ namespace interview.web.Controllers
             }
         }
 
-        // GET: UsuarioController/Details/5
-        public ActionResult Details(int id)
+        private async Task<UsuarioViewResponseModel?> GetUsuario(IMemoryCache cache)
         {
-            return PartialView("_Edit");
+            var token = GetToken(cache);
+            string url = _config.Url + "Usuario";
+            var response = await _get.GetCustomAsync(url, token);
+            return response;
+        }
+
+        // GET: UsuarioController/Details/5
+        public ActionResult Details([FromServices] IMemoryCache cache)
+        {
+            var usuario = GetUsuario(cache);
+            var usuarioEdit = new UsuarioViewModel 
+            { 
+                id = usuario.Result?.id,
+                cpf = usuario.Result.cpf,
+                login = usuario.Result.login,
+                nome = usuario.Result.nome,
+                perfil = usuario.Result.perfil,
+                senha = string.Empty
+            };
+
+            return PartialView("_Edit", usuarioEdit);
         }
 
         // GET: UsuarioController/Create
@@ -90,11 +110,25 @@ namespace interview.web.Controllers
         // POST: UsuarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(IFormCollection collection, [FromServices] IMemoryCache cache)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var url = _config.Url + "Usuario";
+                var body = new UsuarioViewModel()
+                {
+                    id = new Guid(collection["id"].ToString()),
+                    cpf = collection["cpf"].ToString(),
+                    login = collection["login"].ToString(),
+                    nome = collection["nome"].ToString(),
+                    senha = collection["senha"].ToString()
+                };
+
+                var response = _put.PutCustomAsync(body, url, GetToken(cache));
+
+                TempData["MensagemUsuario"] = Utils.ShowAlert(Alerts.Success, response.Result);
+
+                return RedirectToAction("Index", "Usuario");
             }
             catch
             {
@@ -121,13 +155,6 @@ namespace interview.web.Controllers
             {
                 return View();
             }
-        }
-
-        private string GetToken(IMemoryCache cache)
-        {
-            string? token = cache.Get("token")?.ToString();
-            if (token is null) throw new Exception("Sessão expirou");
-            return token;
         }
     }
 }
