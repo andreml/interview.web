@@ -30,7 +30,11 @@ namespace interview.web.Controllers
         {
             try
             {
-                UsuarioViewResponseModel? response = await GetUsuario(cache);
+                var token = GetToken(cache);
+                if (token == null)
+                    return RedirecionarParaLogin();
+
+                UsuarioViewResponseModel? response = await GetUsuario(token);
                 return View(response);
             }
             catch (BadHttpRequestException e)
@@ -40,18 +44,29 @@ namespace interview.web.Controllers
             }
         }
 
-        private async Task<UsuarioViewResponseModel?> GetUsuario(IMemoryCache cache)
+        private async Task<UsuarioViewResponseModel?> GetUsuario(string token)
         {
-            var token = GetToken(cache);
             string url = _config.Url + "Usuario";
             var response = await _get.GetCustomAsync(url, token);
             return response;
         }
 
-        // GET: UsuarioController/Details/5
-        public ActionResult Details([FromServices] IMemoryCache cache)
+        public IActionResult Logout([FromServices] IMemoryCache cache)
         {
-            var usuario = GetUsuario(cache);
+            cache.Remove("token");
+            cache.Remove("perfil");
+
+            return RedirectToAction("Index", "/");
+        }
+
+        // GET: UsuarioController/Details/5
+        public IActionResult Details([FromServices] IMemoryCache cache)
+        {
+            var token = GetToken(cache);
+            if (token == null)
+                return RedirecionarParaLogin();
+
+            var usuario = GetUsuario(token);
             var usuarioEdit = new UsuarioViewModel 
             { 
                 id = usuario.Result?.id,
@@ -110,10 +125,14 @@ namespace interview.web.Controllers
         // POST: UsuarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(IFormCollection collection, [FromServices] IMemoryCache cache)
+        public IActionResult Edit(IFormCollection collection, [FromServices] IMemoryCache cache)
         {
             try
             {
+                var token = GetToken(cache);
+                if (token == null)
+                    return RedirecionarParaLogin();
+                        
                 var url = _config.Url + "Usuario";
                 var body = new UsuarioViewModel()
                 {
@@ -124,7 +143,7 @@ namespace interview.web.Controllers
                     senha = collection["senha"].ToString()
                 };
 
-                var response = _put.PutCustomAsync(body, url, GetToken(cache));
+                var response = _put.PutCustomAsync(body, url, token);
 
                 TempData["MensagemUsuario"] = Utils.ShowAlert(Alerts.Success, response.Result);
 
