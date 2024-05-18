@@ -1,0 +1,89 @@
+﻿@using interview.web.Models.Response;
+@model GetAvaliacoesEnviadasResponse
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="card" style="margin-top: 100px;">
+        <div class="header">
+            <h2>
+                Avaliações enviadas do Questionário '@Model.NomeQuestionario'
+            </h2>
+        </div>
+        @if (Model.AvaliacoesPendentes.Count > 0)
+        {
+            <div class="col-md-12"><h4>Avaliações Pendentes</h4></div>
+            <div class="body table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">Candidato</th>
+                            <th style="text-align:center">Data de Envio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.AvaliacoesPendentes)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.HiddenFor(modelItem => item.IdAvaliacao)
+                                    @Html.DisplayFor(modelItem => item.NomeCandidato)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DataEnvio)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+
+        @if (Model.AvaliacoesRespondidas.Count > 0)
+        {
+            <div class="col-md-12"><h4>Avaliações Respondidas</h4></div>
+            <div class="body table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">Candidato</th>
+                            <th style="text-align:center">Data de Envio</th>
+                            <th style="text-align:center">Data de Resposta</th>
+                            <th style="text-align:center">Nota</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.AvaliacoesRespondidas)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.HiddenFor(modelItem => item.IdAvaliacao)
+                                    @Html.DisplayFor(modelItem => item.NomeCandidato)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DataEnvio)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DataResposta)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Nota)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Visualizar respostas", "ExibirRespostasAvaliacao", new { item.IdAvaliacao }, new { @class = "btn bg-teal waves-effect col-sm-2 col-lg-10" })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <div class="row justify-content-end">
+            <div class="col-2" style='text-align: center; margin-bottom: 20px;'>
+                @Html.ActionLink("Voltar", "Index", "Questionario")
+            </div>
+        </div>
+
+    </div>
+</div>
