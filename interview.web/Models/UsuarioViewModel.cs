@@ -4,6 +4,7 @@ namespace interview.web.Models
 {
     public class UsuarioViewModel
     {
+        public Guid? id { get; set; }
         public string? cpf { get; set; }
         public string? nome { get; set; }
         public Perfil perfil { get; set; }
@@ -13,7 +14,7 @@ namespace interview.web.Models
 
     public class UsuarioViewResponseModel
     {
-        public string? id { get; set; }
+        public Guid? id { get; set; }
         public string? cpf { get; set; }
         public string? nome { get; set; }
         public Perfil perfil { get; set; }
