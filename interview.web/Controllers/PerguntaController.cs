@@ -43,7 +43,7 @@ namespace interview.web.Controllers
                 var response = await ObterPerguntas(token, perguntaId, areaConhecimento, descricao);
                 return View(response);
             }
-            catch (Exception e)
+            catch (BadHttpRequestException e)
             {
                 ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
                 return View(new PerguntaViewResponseModel() { Alternativas = new List<Alternativa>() });
@@ -92,7 +92,7 @@ namespace interview.web.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception e)
+            catch (BadHttpRequestException e)
             {
                 ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
                 return View();
@@ -196,7 +196,7 @@ namespace interview.web.Controllers
 
                 return RedirectToAction("Index");
             }
-            catch (Exception e)
+            catch (BadHttpRequestException e)
             {
                 ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
                 return View(new PerguntaViewResponseModel() { Alternativas = new List<Alternativa>() });
@@ -232,7 +232,7 @@ namespace interview.web.Controllers
 
                 return RedirectToAction("Index");
             }
-            catch (Exception e)
+            catch (BadHttpRequestException e)
             {
                 ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
                 return View();

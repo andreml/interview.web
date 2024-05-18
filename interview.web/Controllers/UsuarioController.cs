@@ -33,7 +33,7 @@ namespace interview.web.Controllers
                 UsuarioViewResponseModel? response = await GetUsuario(cache);
                 return View(response);
             }
-            catch (Exception e)
+            catch (BadHttpRequestException e)
             {
                 ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
                 return RedirectToAction("Index", "Home");
@@ -94,7 +94,7 @@ namespace interview.web.Controllers
 
                 return RedirectToAction("Index", "/");
             }
-            catch (Exception e)
+            catch (BadHttpRequestException e)
             {
                 ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
                 return View();

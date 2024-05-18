@@ -1,4 +1,5 @@
 using interview.web.App.Interfaces;
+using interview.web.App.Middlewares;
 using interview.web.App.Services;
 using interview.web.Config;
 
@@ -22,6 +23,8 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

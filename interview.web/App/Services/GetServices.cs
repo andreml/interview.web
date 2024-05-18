@@ -15,45 +15,43 @@ namespace interview.web.App.Services
 
         public async Task<T?> GetCustomAsync(string urlPath, string token)
         {
-            try
-            {
-                if (urlPath is null || token is null) throw new ArgumentException("Campos obrigatórios não informados (url, token");
 
-                using (var client = _http.CreateClient())
+            if (urlPath is null || token is null) throw new ArgumentException("Campos obrigatórios não informados (url, token");
+
+            using (var client = _http.CreateClient())
+            {
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {token}");
+                var response = client.GetAsync(urlPath).Result;
+                var stringResponse = response.Content.ReadAsStringAsync().Result;
+
+                if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
                 {
-                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {token}");
-                    var response = client.GetAsync(urlPath).Result;
-                    var stringResponse = response.Content.ReadAsStringAsync().Result;
-
-                    if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
-                    {
-                        return null;
-                    }
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var deserializeResult = JsonConvert.DeserializeObject<T>(stringResponse);
-
-                        if (deserializeResult != null)
-                            return await Task.FromResult(deserializeResult);
-                        else if (response.StatusCode == HttpStatusCode.NoContent)
-                            return null;
-
-                        else throw new Exception($"Não foi possível deserializar o retorno da API {urlPath}");
-                    }
-                    else
-                    {
-                        var erroObj = JsonConvert.DeserializeObject<ErrorViewModel>(stringResponse);
-                        string msg = string.Empty;
-                        foreach (var item in erroObj?.mensagens!) msg += msg + Environment.NewLine;
-
-                        throw new Exception(msg);
-                    }
+                    return null;
                 }
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var deserializeResult = JsonConvert.DeserializeObject<T>(stringResponse);
+
+                    if (deserializeResult != null)
+                        return await Task.FromResult(deserializeResult);
+                    else if (response.StatusCode == HttpStatusCode.NoContent)
+                        return null;
+
+                    else throw new Exception($"Não foi possível deserializar o retorno da API {urlPath}");
+                }
+                else if ((int)response.StatusCode == 401 || (int)response.StatusCode == 403)
+                {
+                    throw new UnauthorizedAccessException("Usuário não tem acesso à este recurso");
+                }
+                else
+                {
+                    var erroObj = JsonConvert.DeserializeObject<ErrorViewModel>(stringResponse);
+                    string msg = string.Empty;
+                    foreach (var item in erroObj?.mensagens!) msg += msg + Environment.NewLine;
+
+                    throw new BadHttpRequestException(msg);
+                }
             }
         }
 

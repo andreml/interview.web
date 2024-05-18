@@ -1,0 +1,97 @@
+﻿@using interview.web.Models.View;
+@model List<AvaliacaoCandidatoViewModel>
+
+@{
+    string styles = " .btn-grid { margin: 0 10px;}";
+    Layout = "~/Views/Shared/_LayoutCandidato.cshtml";
+}
+
+<style>
+    @Html.Raw(styles)
+</style>
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="card" style="margin-top: 100px;">
+        <div class="header">
+            <h2>
+                Avaliações
+            </h2>
+        </div>
+        @if (Model.Any(x => !x.Respondido))
+        {
+            <div class="col-md-12"><h4>Avaliações Pendentes</h4></div>
+            <div class="body table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">Avaliação</th>
+                            <th style="text-align:center">Data de Envio</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Where(x => !x.Respondido))
+                        {
+                            <tr>
+                                <td style="text-align:center">
+                                    @Html.HiddenFor(modelItem => item.Id)
+                                    @Html.DisplayFor(modelItem => item.NomeQuestionario)
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(modelItem => item.DataEnvio)
+                                </td>
+                                 <td style="text-align:end">
+                                     @Html.ActionLink("Responder", "ExibirTelaResponderAvaliacao", new { item.Id }, new { @class = "btn btn-grid bg-teal waves-effect" })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        @if (Model.Any(x => x.Respondido))
+        {
+            <div class="col-md-12"><h4>Avaliações Respondidas</h4></div>
+            <div class="body table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center">Avaliação</th>
+                            <th style="text-align:center">Data de Envio</th>
+                            <th style="text-align:center">Data de Resposta</th>
+                            <th style="text-align:center">Nota</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Where(x => x.Respondido))
+                        {
+                            <tr>
+                                <td style="text-align:center">
+                                    @Html.HiddenFor(modelItem => item.Id)
+                                    @Html.DisplayFor(modelItem => item.NomeQuestionario)
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(modelItem => item.DataEnvio)
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(modelItem => item.DataResposta)
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(modelItem => item.Nota)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        <div class="row justify-content-end">
+            <div class="col-2" style='text-align: center; margin-bottom: 20px;'>
+                @Html.ActionLink("Voltar", "IndexCandidato", "Home")
+            </div>
+        </div>
+
+    </div>
+</div>

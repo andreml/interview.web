@@ -14,38 +14,37 @@ namespace interview.web.App.Services
 
         public async Task<T> DeleteByIdCustomAsync(string urlPath, string token, string id)
         {
-            try
+
+            if (urlPath is null || token is null) throw new ArgumentException("Campos obrigatórios não informados (url, token");
+
+            using (var client = _http.CreateClient())
             {
-                if (urlPath is null || token is null) throw new ArgumentException("Campos obrigatórios não informados (url, token");
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {token}");
+                var response = client.DeleteAsync($"{urlPath}/{id}").Result;
+                var stringResponse = response.Content.ReadAsStringAsync().Result;
 
-                using (var client = _http.CreateClient())
+                if (response.IsSuccessStatusCode)
                 {
-                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {token}");
-                    var response = client.DeleteAsync($"{urlPath}/{id}").Result;
-                    var stringResponse = response.Content.ReadAsStringAsync().Result;
+                    var retorno = (T)Convert.ChangeType(stringResponse, typeof(T));
+                    return await Task.FromResult(retorno);
+                }
+                else if ((int)response.StatusCode == 401 || (int)response.StatusCode == 403)
+                {
+                    throw new UnauthorizedAccessException("Usuário não tem acesso à este recurso");
+                }
+                else
+                {
+                    var erroObj = JsonConvert.DeserializeObject<ErrorViewModel>(stringResponse);
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var retorno = (T)Convert.ChangeType(stringResponse, typeof(T));
-                        return await Task.FromResult(retorno);
-                    }
-                    else
-                    {
-                        var erroObj = JsonConvert.DeserializeObject<ErrorViewModel>(stringResponse);
+                    var mensagem = "Erro ao processar a requisição";
 
-                        var mensagem = "Erro ao processar a requisição";
+                    if (erroObj != null && erroObj.mensagens != null && erroObj.mensagens.Any())
+                        mensagem = string.Join("; ", erroObj!.mensagens!);
 
-                        if (erroObj != null && erroObj.mensagens != null && erroObj.mensagens.Any())
-                            mensagem = string.Join("; ", erroObj!.mensagens!);
-
-                        throw new Exception(mensagem);
-                    }
+                    throw new BadHttpRequestException(mensagem);
                 }
             }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
+
         }
     }
 }
