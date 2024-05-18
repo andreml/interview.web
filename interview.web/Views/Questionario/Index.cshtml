@@ -4,11 +4,7 @@
 }
 
 @{
-    string styles = @"
-        .btn-cadastrar {
-            margin: 15px;
-        }
-    ";
+    string styles = ".btn-cadastrar { margin: 15px; }";
 }
 
 <style>
@@ -16,9 +12,11 @@
 </style>
 
 <h1>Questionarios</h1>
+
 <div>
     @Html.ActionLink("Cadastrar", "ExibirTelaCriarAlterar", "Questionario", null, new { @class = "btn bg-teal waves-effect col-sm-1 btn-cadastrar" })
 </div>
+
 <section id="PartialViewListarQuestionarios">
     <partial name="~/Views/Questionario/_List.cshtml" />
 </section>

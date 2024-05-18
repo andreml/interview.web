@@ -3,17 +3,21 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<br />
-<br />
-<br />
-<br />
-@Html.ActionLink("Cadastrar", "Create", "Pergunta", null, new { @class = "btn bg-teal waves-effect col-sm-1" })
-<br />
-<br />
-<html>
-<body>
-    <div>
-        <partial name="~/Views/Pergunta/_List.cshtml" />
-    </div>
-</body>
-</html>
+@{
+    string styles = ".btn-cadastrar { margin: 15px; }";
+}
+
+<style>
+    @Html.Raw(styles)
+</style>
+
+
+<h1>&nbsp;</h1>
+
+<div>
+    @Html.ActionLink("Cadastrar", "Create", "Pergunta", null, new { @class = "btn bg-teal waves-effect col-sm-1 btn-cadastrar" })
+</div>
+
+<section id="PartialViewListarPerguntas">
+    <partial name="~/Views/Pergunta/_List.cshtml" />
+</section>
