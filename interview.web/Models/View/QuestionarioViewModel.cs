@@ -19,9 +19,9 @@ public class QuestionarioPerguntaViewModel
 
     public QuestionarioPerguntaViewModel(PerguntaViewResponseModel pergunta)
     {
-        Id = pergunta.id;
-        Descricao = pergunta.descricao;
-        AreaConhecimento = pergunta.areaConhecimento;
+        Id = pergunta.Id;
+        Descricao = pergunta.Descricao;
+        AreaConhecimento = pergunta.AreaConhecimento;
         Selecionada = false;
     }
 

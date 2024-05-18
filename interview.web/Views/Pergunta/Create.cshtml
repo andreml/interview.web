@@ -5,16 +5,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<br />
-<br />
-<br />
-<br />
-<br />
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <div class="card">
+    <div class="card" style="margin-top: 100px;">
         <div class="header">
             <h2>
-                Cadastrar nova pergunta
+                Cadastrar Pergunta
             </h2>
         </div>
         <div class="body">
@@ -23,16 +18,16 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <div class="form-line">
-                                <label asp-for="descricao" class="control-label">Pergunta</label>
-                                <input asp-for="descricao" type="text" class="form-control" placeholder="Digite a pergunta">
+                                <label asp-for="Descricao" class="control-label">Pergunta</label>
+                                <input asp-for="Descricao" type="text" class="form-control" placeholder="Digite a pergunta">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <div class="form-line">
-                                <label asp-for="areaConhecimento" class="control-label">Area de Conhecimento</label>
-                                <input asp-for="areaConhecimento" type="text" class="form-control" placeholder="Digite a area de conhecimento">
+                                <label asp-for="AreaConhecimento" class="control-label">Area de Conhecimento</label>
+                                <input asp-for="AreaConhecimento" type="text" class="form-control" placeholder="Digite a area de conhecimento">
                             </div>
                         </div>
                     </div>
@@ -40,54 +35,54 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <div class="form-line">
-                            <label asp-for="resposta1" class="control-label">Respostas 1</label>
-                            <input asp-for="resposta1" type="text" class="form-control" placeholder="Digite uma respostas">
-                            <input asp-for="correta1" type="checkbox" class="ch" >
-                            <label for="correta1">Resposta correta</label>
+                            <label asp-for="Resposta1" class="control-label">Alternativa 1</label>
+                            <input asp-for="Resposta1" type="text" class="form-control" placeholder="Digite uma respostas">
+                            <input name="radio-correta" asp-for="Correta1" type="radio" class="ch" value="1">
+                            <label for="Correta1">Alternativa correta</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="form-line">
-                            <label asp-for="resposta2" class="control-label">Respostas 2</label>
-                            <input asp-for="resposta2" type="text" class="form-control" placeholder="Digite uma respostas">
-                            <input asp-for="correta2" type="checkbox" class="ch" >
-                            <label for="correta2">Resposta correta</label>
+                            <label asp-for="Resposta2" class="control-label">Alternativa 2</label>
+                            <input asp-for="Resposta2" type="text" class="form-control" placeholder="Digite uma respostas">
+                            <input name="radio-correta" asp-for="Correta2" type="radio" class="ch" value="2">
+                            <label for="Correta2">Alternativa correta</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="form-line">
-                            <label asp-for="resposta3" class="control-label">Respostas 3</label>
-                            <input asp-for="resposta3" type="text" class="form-control" placeholder="Digite uma respostas">
-                            <input asp-for="correta3" type="checkbox" class="ch" >
-                            <label for="correta3">Resposta correta</label>
+                            <label asp-for="Resposta3" class="control-label">Alternativa 3</label>
+                            <input asp-for="Resposta3" type="text" class="form-control" placeholder="Digite uma respostas">
+                            <input name="radio-correta" asp-for="Correta3" type="radio" class="ch" value="3">
+                            <label for="Correta3">Alternativa correta</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="form-line">
-                            <label asp-for="resposta4" class="control-label">Respostas 4</label>
-                            <input asp-for="resposta4" type="text" class="form-control" placeholder="Digite uma respostas">
-                            <input asp-for="correta4" type="checkbox" class="ch" >
-                            <label for="correta4">Resposta correta</label>
+                            <label asp-for="Resposta4" class="control-label">Alternativa 4</label>
+                            <input asp-for="Resposta4" type="text" class="form-control" placeholder="Digite uma respostas">
+                            <input name="radio-correta" asp-for="Correta4" type="radio" class="ch" value="4">
+                            <label for="Correta4">Alternativa correta</label>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="form-line">
-                            <label asp-for="resposta5" class="control-label ">Respostas 5</label>
-                            <input asp-for="resposta5" type="text" class="form-control" placeholder="Digite uma respostas" heigth="50%">
-                            <input asp-for="correta5" type="checkbox" class="ch" >
-                            <label for="correta5">Resposta correta</label>
+                            <label asp-for="Resposta5" class="control-label ">Alternativa 5</label>
+                            <input asp-for="Resposta5" type="text" class="form-control" placeholder="Digite uma respostas" heigth="50%">
+                            <input name="radio-correta" asp-for="Correta5" type="radio" class="ch" value="5">
+                            <label for="Correta5">Alternativa correta</label>
                         </div>
                     </div>
-                    <div style="display:block;justify-content:center">
-                        <input type="submit" value="Salvar" class="btn bg-teal waves-effect col-sm-2" />
-                        @Html.ActionLink("Voltar", "Index", "Pergunta", null, new { @class = "btn bg-warning waves-effect col-sm-2 text-white" })
+                </div>
+                <div class="row justify-content-end">
+                    <div class="col-2" style='text-align: right;'>
+                        @Html.ActionLink("Voltar", "Index")
+
+                        <input type="submit" value="Salvar" class="btn btn-primary" />
                     </div>
                 </div>
             </form>
         </div>
-    </div>
-    <div class="alert">
-        @Html.Raw(ViewBag.Alert);
     </div>
 </div>
 

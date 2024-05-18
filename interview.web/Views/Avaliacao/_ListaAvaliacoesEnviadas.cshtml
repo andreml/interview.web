@@ -1,6 +1,14 @@
 ﻿@using interview.web.Models.Response;
 @model GetAvaliacoesEnviadasResponse
 
+@{
+    string styles = " .btn-grid { margin: 0 10px;}";
+}
+
+<style>
+    @Html.Raw(styles)
+</style>
+
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="card" style="margin-top: 100px;">
         <div class="header">
@@ -69,8 +77,8 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Nota)
                                 </td>
-                                <td>
-                                    @Html.ActionLink("Visualizar respostas", "ExibirRespostasAvaliacao", new { item.IdAvaliacao }, new { @class = "btn bg-teal waves-effect col-sm-2 col-lg-10" })
+                                <td style="text-align: end;">
+                                    @Html.ActionLink("Visualizar respostas", "ExibirRespostasAvaliacao", new { item.IdAvaliacao }, new { @class = "btn btn-grid bg-teal waves-effect" })
                                 </td>
                             </tr>
                         }

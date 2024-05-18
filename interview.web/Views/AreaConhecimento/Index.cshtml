@@ -1,19 +1,17 @@
 ﻿@{
-    string styles = @"
-        .btn-cadastrar {
-            margin: 15px;
-        }
-    ";
+    string styles = ".btn-cadastrar { margin: 15px; }";
 }
 
 <style>
     @Html.Raw(styles)
 </style>
 
-<h1>Áreas de conhecimento</h1>
+<h1>&nbsp;</h1>
+
 <div>
     @Html.ActionLink("Cadastrar", "ExibirTelaCriarAlterar", "AreaConhecimento", null, new { @class = "btn bg-teal waves-effect col-sm-1 btn-cadastrar" })
 </div>
+
 <section id="PartialViewListarAreasConhecimento">
     <partial name="~/Views/AreaConhecimento/_List.cshtml" />
 </section>

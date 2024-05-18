@@ -79,8 +79,8 @@ public class QuestionarioController : BaseController
             Id = id,
             NomeQuestionario = string.Empty,
             Perguntas = perguntas
-                        .OrderBy(p => p.areaConhecimento)
-                        .ThenBy(p => p.descricao)
+                        .OrderBy(p => p.AreaConhecimento)
+                        .ThenBy(p => p.Descricao)
                         .Select(p => new QuestionarioPerguntaViewModel(p))
                         .ToList()
         };
