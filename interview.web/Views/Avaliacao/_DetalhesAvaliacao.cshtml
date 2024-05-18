@@ -1,0 +1,53 @@
+﻿@using interview.web.Models.Response;
+@model GetDetalheRespostasAvaliacaoResponse
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="card" style="margin-top: 100px;">
+        <div class="header">
+            <h2>
+                Respostas ao '@Model.NomeQuestionario'
+            </h2>
+        </div>
+
+        <div class="col-md-12" style="margin-top: 20px;"><b>Candidato: </b> @Model.Candidato</div>
+        <div class="col-md-12"><b>Data de Envio: </b> @Model.DataEnvio</div>
+        <div class="col-md-12"><b>Data de Resposta: </b> @Model.DataResposta</div>
+        <div class="col-md-12"><b>Nota: </b> @Model.Nota</div>
+        <br />
+        <div class="col-md-12"><h4>Respostas:</h4></div>
+
+        <div class="body table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="text-align:center">Pergunta</th>
+                        <th style="text-align:center">Alternativa Escolhida</th>
+                        <th style="text-align:center">Correta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Respostas)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Pergunta)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RespostaEscolhida)
+                            </td>
+                            <td>
+                                @(item.Correta ? "Sim" : "Não")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="row justify-content-end">
+            <div class="col-2" style='text-align: center; margin-bottom: 20px;'>
+                @Html.ActionLink("Voltar", "ExibirTelaAvaliacoesEnviadas", "Avaliacao", 
+                new { Id = Model.QuestionarioId, Nome = Model.NomeQuestionario })
+            </div>
+        </div>
+    </div>
+</div>
