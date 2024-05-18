@@ -44,11 +44,18 @@ namespace interview.web.Controllers
 
                 var response = await _postService.PostCustomAsync(body, url, "token");
                 var options = new CookieOptions() { MaxAge = TimeSpan.FromHours(1), HttpOnly = true };
+
                 Response.Cookies.Append("token", response.token, options);
-                cache.Set<string>("token", response.token);
-                return RedirectToAction("Index", "Home", new { token = response.token });
+
+                cache.Set("token", response.token);
+                cache.Set("perfil", response.perfil);
+
+                if (response.perfil.Equals("avaliador", StringComparison.OrdinalIgnoreCase))
+                    return RedirectToAction("Index", "Home", new { response.token });
+                else
+                    return RedirectToAction("IndexCandidato", "Home", new { response.token });
             }
-            catch (Exception e)
+            catch (BadHttpRequestException e)
             {
                 ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
                 return View(nameof(Index));

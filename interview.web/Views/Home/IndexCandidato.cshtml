@@ -1,0 +1,37 @@
+﻿@using interview.web.Models.View;
+@model List<AvaliacaoCandidatoViewModel>
+
+@{
+    ViewData["Title"] = "Principal";
+    Layout = "~/Views/Shared/_LayoutCandidato.cshtml";
+}
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<div class="row clearfix">
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box bg-orange hover-expand-effect">
+            <div class="icon">
+                <i class="material-icons">pending_actions</i>
+            </div>
+            <div class="content">
+                <div class="text">Avaliações Pendentes</div>
+                <div class="number count-to" data-from="0" data-to="1225" data-speed="1000" data-fresh-interval="20">@Model.Count(a => !a.Respondido)</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <div class="icon bg-indigo">
+                <i class="material-icons">notes</i>
+            </div>
+            <div class="content">
+                <div class="text">Avaliações Respondidas</div>
+                <div class="number count-to" data-from="0" data-to="257" data-speed="1000" data-fresh-interval="20">@Model.Count(a => a.Respondido)</div>
+            </div>
+        </div>
+    </div>
+</div>

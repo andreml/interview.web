@@ -1,8 +1,6 @@
 ﻿using interview.web.App.Interfaces;
 using interview.web.Models;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Newtonsoft.Json;
-using static System.Net.WebRequestMethods;
 using System.Text;
 
 namespace interview.web.App.Services
@@ -16,39 +14,38 @@ namespace interview.web.App.Services
         }
         public async Task<T> PutCustomAsync(object body, string url, string token)
         {
-            try
+
+            if (body is null || token is null || url is null) throw new ArgumentException("Campos obrigatórios não informados (url, body, token)");
+
+            using (var client = _http.CreateClient())
             {
-                if (body is null || token is null || url is null) throw new ArgumentException("Campos obrigatórios não informados (url, body, token)");
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {token}");
+                var stringContent = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
+                var response = client.PutAsync(url, stringContent).Result;
+                var stringResponse = response.Content.ReadAsStringAsync().Result;
 
-                using (var client = _http.CreateClient())
+                if (response.IsSuccessStatusCode)
                 {
-                    client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {token}");
-                    var stringContent = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
-                    var response = client.PutAsync(url, stringContent).Result;
-                    var stringResponse = response.Content.ReadAsStringAsync().Result;
+                    var retorno = (T)Convert.ChangeType(stringResponse, typeof(T));
+                    return await Task.FromResult(retorno);
+                }
+                else if ((int)response.StatusCode == 401 || (int)response.StatusCode == 403)
+                {
+                    throw new UnauthorizedAccessException("Usuário não tem acesso à este recurso");
+                }
+                else
+                {
+                    var erroObj = JsonConvert.DeserializeObject<ErrorViewModel>(stringResponse);
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var retorno = (T)Convert.ChangeType(stringResponse, typeof(T));
-                        return await Task.FromResult(retorno);
-                    }
-                    else
-                    {
-                        var erroObj = JsonConvert.DeserializeObject<ErrorViewModel>(stringResponse);
+                    var mensagem = "Erro ao processar a requisição";
 
-                        var mensagem = "Erro ao processar a requisição";
+                    if (erroObj != null && erroObj.mensagens != null && erroObj.mensagens.Any())
+                        mensagem = string.Join("; ", erroObj!.mensagens!);
 
-                        if (erroObj != null && erroObj.mensagens != null && erroObj.mensagens.Any())
-                            mensagem = string.Join("; ", erroObj!.mensagens!);
-
-                        throw new Exception(mensagem);
-                    }
+                    throw new BadHttpRequestException(mensagem);
                 }
             }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
+
         }
     }
 }

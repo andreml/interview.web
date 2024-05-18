@@ -32,7 +32,7 @@ namespace interview.web.Controllers
                 var response = await _get.GetCustomAsync(url, token);
                 return View(response);
             }
-            catch (Exception e)
+            catch (BadHttpRequestException e)
             {
                 ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
                 return RedirectToAction("Index", "Home");
@@ -74,7 +74,7 @@ namespace interview.web.Controllers
 
                 return RedirectToAction("Index", "/");
             }
-            catch (Exception e)
+            catch (BadHttpRequestException e)
             {
                 ViewBag.Alert = Utils.ShowAlert(Alerts.Error, e.Message);
                 return View();

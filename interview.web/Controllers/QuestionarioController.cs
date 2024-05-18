@@ -51,7 +51,7 @@ public class QuestionarioController : BaseController
             var response = await _get.GetCustomAsync(url, token);
             return response == null ? View(new List<GetQuestionarioResponse>()) : View(response);
         }
-        catch (Exception e)
+        catch (BadHttpRequestException e)
         {
             ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
             return RedirectToAction("Index", "Home");
@@ -122,7 +122,7 @@ public class QuestionarioController : BaseController
             TempData["MensagemQuestionario"] =
                 Utility.Utils.ShowAlert(Alerts.Success, "Questionário excluído");
         }
-        catch (Exception e)
+        catch (BadHttpRequestException e)
         {
             TempData["MensagemQuestionario"] = Utility.Utils.ShowAlert(Alerts.Error, e.Message);
         }
@@ -178,7 +178,7 @@ public class QuestionarioController : BaseController
                     Utility.Utils.ShowAlert(Alerts.Success, "Questionário alterado com sucesso");
             }
         }
-        catch (Exception e)
+        catch (BadHttpRequestException e)
         {
             TempData["MensagemQuestionario"] =
                 Utility.Utils.ShowAlert(Alerts.Error, e.Message);
@@ -225,7 +225,7 @@ public class QuestionarioController : BaseController
             return RedirectToAction("Index");
 
         }
-        catch(Exception ex)
+        catch(BadHttpRequestException ex)
         {
             ViewBag.Alert = Utility.Utils.ShowAlert(Alerts.Error, ex.Message);
 
