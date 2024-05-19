@@ -20,6 +20,21 @@
     <link href="~/css/alert.css" rel="stylesheet" />
 </head>
 <body>
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Carregando...</p>
+        </div>
+    </div>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -46,7 +61,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Index">Meu cadastro</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-red" asp-area="" asp-controller="Usuario" asp-action="Logout">Logout</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Logout">Logout</a>
                         </li>
                     </ul>
                 </div>
@@ -78,7 +93,11 @@
     <script src="~/material-design/plugins/node-waves/waves.js"></script>
     <script src="~/material-design/plugins/jquery-countto/jquery.countTo.js"></script>
     <script src="~/js/site.js"></script>
-
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.loader').parent().remove().delay(500)
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
