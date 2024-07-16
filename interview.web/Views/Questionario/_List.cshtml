@@ -39,14 +39,14 @@
                             <td style="text-align: end;">
                                 @if (item.AvaliacoesEnviadas > 0)
                                 {
-                                    @Html.ActionLink("Visualizar avaliações enviadas", "ExibirTelaAvaliacoesEnviadas", "Avaliacao", new { item.Id, item.Nome }, new { @class = "btn btn-grid bg-teal waves-effect" })
+                                    @Html.ActionLink("Visualizar avaliações enviadas", "ExibirTelaAvaliacoesEnviadas", "Avaliacao", new { item.Id, item.Nome }, new { @class = "btn btn-grid bg-teal waves-effect text-white" })
                                 }
 
-                                @Html.ActionLink("Enviar para Candidato", "ExibirTelaEnviarParaCandidato", new { item.Id }, new { @class = "btn btn-grid bg-primary waves-effect" })
+                                @Html.ActionLink("Enviar para Candidato", "ExibirTelaEnviarParaCandidato", new { item.Id }, new { @class = "btn btn-grid bg-primary waves-effect text-white" })
 
-                                @Html.ActionLink("Alterar", "ExibirTelaCriarAlterar", new { item.Id }, new { @class = "btn btn-grid bg-warning waves-effect" })
+                                @Html.ActionLink("Alterar", "ExibirTelaCriarAlterar", new { item.Id }, new { @class = "btn btn-grid bg-warning waves-effect text-white" })
 
-                                @Html.ActionLink("Excluir", "Delete", new { item.Id }, new { @class = "btn btn-grid bg-danger text-white waves-effect" })
+                                @Html.ActionLink("Excluir", "Delete", new { item.Id }, new { @class = "btn btn-grid bg-danger text-white waves-effect text-white " })
                             </td>
                         </tr>
                     }
